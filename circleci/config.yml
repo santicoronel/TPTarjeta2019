@@ -1,20 +1,28 @@
 version: 2
 jobs:
   build:
-      - image: circleci/php:7.1-node-browsers
+    docker:
+        - image: circleci/php:7.1-node-browsers
+        
+    steps:
+        -checkout
+        
+        - run: sudo apt update 
+        - run: sudo docker-php-ext-install zip
 
- - run: composer install -n --prefer-source
+  - restore_cache:
+            keys:
+              - v1-dependencies-{{ checksum "composer.json" }}
+              - v1-dependencies-
+  - run: composer install -n --prefer-dist
 
- - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "composer.json" }}
+  - save_cache:
+            key: v1-dependencies-{{ checksum "composer.json" }}
+            paths:
+              - ./vendor
 
-- save_cache:
-          key: v1-dependencies-{{ checksum "composer.json" }}
-          paths:
-            - ./vendor
+  - run: touch storage/testing.sqlite
+        - run: php artisan migrate --env=testing --database=sqlite_testing --force
 
-- run: touch storage/testing.sqlite
-      - run: php artisan migrate --env=testing --database=sqlite_testing --force
+  - run: ./vendor/bin/phpunit --color tests
 
-- run: ./vendor/bin/phpunit --color tests
