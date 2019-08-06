@@ -1,0 +1,18 @@
+version: 2
+jobs:
+  build:
+      - image: circleci/php:7.1-node-browsers
+
+ - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "composer.json" }}
+
+- save_cache:
+          key: v1-dependencies-{{ checksum "composer.json" }}
+          paths:
+            - ./vendor
+
+- run: touch storage/testing.sqlite
+      - run: php artisan migrate --env=testing --database=sqlite_testing --force
+
+- run: ./vendor/bin/phpunit --color tests
