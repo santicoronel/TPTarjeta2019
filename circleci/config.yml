@@ -3,6 +3,8 @@ jobs:
   build:
       - image: circleci/php:7.1-node-browsers
 
+ - run: composer install -n --prefer-source
+
  - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "composer.json" }}
