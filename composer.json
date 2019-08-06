@@ -2,7 +2,7 @@
 {
     "autoload": {
        "psr-4": {
-          "Bingo\\": "src"
+          "TrabajoTarjeta\\": "src"
        }
     },
     "require": {
