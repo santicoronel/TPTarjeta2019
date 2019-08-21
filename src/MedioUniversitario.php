@@ -2,55 +2,48 @@
 
 namespace TrabajoTarjeta;
 
-class MedioUniversitario extends Medio implements TarjetaInterface {
+class EstrategiaDeCobroMedioUniversitario implements EstrategiaDeCobroInterface {
 
-    protected $tipo = "Medio Universitario";
     private $mediosUsados = 0;
 
-    /** Redefinimos el valor del pasaje de la clase y agregamos un límite de dos boletos por día. Ejemplo: 6.70
+    public function tipo () {
+        return "Medio Universitario";
+    }
+
+    /**
+     * Devuelve la mitad del valor usual, con un límite de dos boletos por día.
      * 
      * @return float
      *    Valor del pasaje
      */
-    public function valorPasaje() {
+    public function valorPasaje($valorBase) {
         if ($this->mediosUsados <= 2) {
-            return ($this->pasaje) / 2.0;
+            return $valorBase / 2.0;
         } else {
-            return $this->pasaje;
+            return $valorBase;
         }
       }
 
     /**
-     * Redefinimos la funcion para que, además de descontar el boleto de la tarjeta, se fije que no se hayan
-     * emitido más de dos medios boletos en el día. De ser así, se abona un boleto común. Ejemplo: "Medio Universitario"
+     * Lleva la cuenta de la cantidad de medios usados
      * 
-     * @param ColectivoInterface $colectivo
-     * 
-     * @return string|bool
-     *    El tipo de pago o FALSE si el saldo es insuficiente
+     * @return bool
+     *    Si tiene permitido o no viajar segun las regulaciones del medio universitario
      */
-    public function descontarSaldo(ColectivoInterface $colectivo) {
-
-        if ($this->anteriorColectivo == NULL) { 
-            $this->anteriorColectivo = $colectivo;
-          } else {
-            $this->anteriorColectivo = $this->actualColectivo;
-          }
-
-        $this->actualColectivo = $colectivo;
-        
+    public function tienePermitidoViajar($tiempoActual) {
+        // FIXME: comparar por YMD en vez de DMY  
         $hoy = date("d/m/Y", $this->tiempo->time());
         $diaPago = date("d/m/Y", $this->horaPago);
+        
         if ($hoy > $diaPago) {
           $this->mediosUsados = 0;
         }
-        if ($this->mediosUsados <= 2) {
-            $this->mediosUsados += 1;
-            return $this->pagarBoleto();
-        } else {
-            return $this->pagarBoleto();
-        }
         
+        if ($this->mediosUsados <= 2) {
+          $this->mediosUsados += 1;
+        }
+
+        return TRUE;
     }
 
 

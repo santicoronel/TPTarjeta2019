@@ -2,44 +2,36 @@
 
 namespace TrabajoTarjeta;
 
-class Medio extends Tarjeta implements TarjetaInterface {
+class EstrategiaDeCobroMedio implements EstrategiaDeCobroInterface {
 
-  protected $tipo = "Medio";
+  private $horaPago;
 
-    /** Redefinimos el valor del pasaje de la clase a la mitad. Ejemplo: 6.70
-     * 
-     * @return float
-     *    Valor del pasaje
-     */
-    public function valorPasaje() {
-      return ($this->pasaje) / 2.0;
+  public function tipo (){
+    return "Medio";
   }
 
+  /** Devuelve la mitad del costo usual.
+   * 
+   * @return float
+   *    Valor del pasaje
+   */
+  public function valorPasaje($valorBase) {
+    return $valorBase / 2.0;
+  }
 
   /**
-   * Redefinimos la funcion para que, además de descontar el boleto de la tarjeta, se fije que el último viaje haya
-   * sido emitido al menos 5 minutos más tarde que el anterior. Ejemplo: "Medio"
+   * Se fija que el último viaje haya sido emitido al menos 5 minutos más tarde
+   * que el anterior.
    * 
-   * @param ColectivoInterface $colectivo
-   * 
-   * @return string|bool
-   *    El tipo de pago o FALSE si el saldo es insuficiente
+   * @return bool
+   *    Si tiene permitido o no viajar segun las regulaciones del medio boleto
    */
-  public function descontarSaldo(ColectivoInterface $colectivo) {
-    
-    if ($this->anteriorColectivo == NULL) { 
-      $this->anteriorColectivo = $colectivo;
-    } else {
-      $this->anteriorColectivo = $this->actualColectivo;
-    }
-      $this->actualColectivo = $colectivo;
+  public function tienePermitidoViajar($tiempoActual) {
+    $diferenciaDeTiempo = $horaActual - $this->horaPago;
+    $this->horaPago = $tiempoActual;
+    $cincoMinutos = 60 * 5;
 
-    if ($this->tiempo->time() == $this->horaPago) { //si la hora actual = la hora del ultimopago significa que es el primer pago que hace la tarjeta
-      return $this->pagarBoleto(); //por lo tanto se cobra normalmente el boleto
-    } elseif ($this->tiempo->time() - $this->horaPago >= 300) { //si pasaron 5 minutos o mas desde la ultima compra
-      return $this->pagarBoleto(); //se cobra el boleto normalmente
-    } else { //si no pasaron al menos 5 minutos
-      return FALSE; //no puede pagar
-    }
+    // si pasaron menos de 5 minutos, y no es el primer pago, no puede pagar
+    return !($diferenciaDeTiempo != 0 && $diferenciaDeTiempo < $cincoMinutos);
   }
 }

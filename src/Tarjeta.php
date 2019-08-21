@@ -16,8 +16,13 @@ class Tarjeta implements TarjetaInterface {
     protected $fueTrasbordo = FALSE;
     protected $plusPPagar;
     protected $tiempo;
+    private $estrategiaDeCobro;
 
-    public function __construct($id, TiempoInterface $tiempo) {
+    public function __construct($id, TiempoInterface $tiempo, EstrategiaDeCobroInterface $estrategiaDeCobro = null) {
+      $this->estrategiaDeCobro = $estrategiaDeCobro;
+      if($this->estrategiaDeCobro == null)
+        $this->estrategiaDeCobro = new EstrategiaDeCobroNormal;
+
       $this->id = $id;
       $this->saldo = 0.0;
       $this->tiempo = $tiempo;
@@ -50,14 +55,8 @@ class Tarjeta implements TarjetaInterface {
       return $cargavalida;
     }
 
-    /**
-     * Devuelve el valor de un pasaje. Ejemplo: 16.8
-     *
-     * @return float
-     *    Valor de pasaje
-     */
-    public function valorPasaje() {
-      return $this->pasaje;
+    public function valorPasaje() : float {
+      return $this->estrategiaDeCobro->valorPasaje($this->pasaje);
     }
 
     /** 
@@ -163,9 +162,12 @@ class Tarjeta implements TarjetaInterface {
       } else {
         $this->anteriorColectivo = $this->actualColectivo;
       }
-        $this->actualColectivo = $colectivo;
+      $this->actualColectivo = $colectivo;
 
-      return $this->pagarBoleto();
+      if($this->estrategiaDeCobro->tienePermitidoViajar($this->tiempo->time()))
+        return $this->pagarBoleto();
+      else
+        return FALSE;
     }
 
 
@@ -218,7 +220,7 @@ class Tarjeta implements TarjetaInterface {
      *    Tipo de tarjeta
      */
     public function obtenerTipo() {
-      return $this->tipo;
+      return $this->estrategiaDeCobro->tipo();
     }
 
     /**
