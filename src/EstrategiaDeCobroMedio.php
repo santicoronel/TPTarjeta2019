@@ -30,13 +30,17 @@ class EstrategiaDeCobroMedio implements EstrategiaDeCobroInterface {
         if ($this->horaPago == null)
             $this->horaPago = $tiempoActual;
 
-        $diferenciaDeTiempo = $horaActual - $this->horaPago;
+        $diferenciaDeTiempo = $tiempoActual - $this->horaPago;
 
-        $this->horaPago = $tiempoActual;
         $cincoMinutos = 60 * 5;
 
         // Puedo pagar si es el primer pago
         // o si pasaron cinco minutos o mas desde el anterior
-        return $diferenciaDeTiempo == 0 || $diferenciaDeTiempo >= $cincoMinutos;
+        if ($diferenciaDeTiempo == 0 || $diferenciaDeTiempo >= $cincoMinutos) {
+            $this->horaPago = $tiempoActual;
+            return true;
+        } else {
+            return false;
+        }
     }
 }
