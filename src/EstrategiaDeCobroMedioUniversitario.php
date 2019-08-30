@@ -5,6 +5,7 @@ namespace TrabajoTarjeta;
 class EstrategiaDeCobroMedioUniversitario implements EstrategiaDeCobroInterface {
 
     private $mediosUsados = 0;
+    private $horaPago = null;
 
     public function tipo () {
         return "Medio Universitario";
@@ -31,9 +32,11 @@ class EstrategiaDeCobroMedioUniversitario implements EstrategiaDeCobroInterface 
      *    Si tiene permitido o no viajar segun las regulaciones del medio universitario
      */
     public function tienePermitidoViajar($tiempoActual) {
-        // FIXME: comparar por YMD en vez de DMY
-        $hoy = date("d/m/Y", $this->tiempo->time());
-        $diaPago = date("d/m/Y", $this->horaPago);
+        if ($this->horaPago == null)
+            $this->horaPago = $tiempoActual;
+
+        $hoy = date("Y/m/d", $tiempoActual);
+        $diaPago = date("Y/m/d", $this->horaPago);
 
         if ($hoy > $diaPago) {
             $this->mediosUsados = 0;
@@ -42,6 +45,8 @@ class EstrategiaDeCobroMedioUniversitario implements EstrategiaDeCobroInterface 
         if ($this->mediosUsados <= 2) {
             $this->mediosUsados += 1;
         }
+
+        $this->horaPago = $tiempoActual;
 
         return TRUE;
     }
