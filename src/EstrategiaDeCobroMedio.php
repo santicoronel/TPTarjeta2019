@@ -27,7 +27,7 @@ class EstrategiaDeCobroMedio implements EstrategiaDeCobroInterface {
      *    Si tiene permitido o no viajar segun las regulaciones del medio boleto
      */
     public function tienePermitidoViajar($tiempoActual) {
-        if ($this->horaPago == null)
+        if ($this->horaPago === null)
             $this->horaPago = $tiempoActual;
 
         $diferenciaDeTiempo = $tiempoActual - $this->horaPago;
