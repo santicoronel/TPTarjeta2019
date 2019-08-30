@@ -16,7 +16,7 @@ class EstrategiaDeCobroMedioUniversitario implements EstrategiaDeCobroInterface 
      * @return float
      *    Valor del pasaje
      */
-    public function valorPasaje($valorBase) {
+    public function valorPasaje($valorBase) : float {
         if ($this->mediosUsados <= 2) {
             return $valorBase / 2.0;
         } else {

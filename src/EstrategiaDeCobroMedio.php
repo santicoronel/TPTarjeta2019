@@ -15,7 +15,7 @@ class EstrategiaDeCobroMedio implements EstrategiaDeCobroInterface {
      * @return float
      *    Valor del pasaje
      */
-    public function valorPasaje($valorBase) {
+    public function valorPasaje($valorBase) : float {
         return $valorBase / 2.0;
     }
 

@@ -8,7 +8,7 @@ class EstrategiaDeCobroNormal implements EstrategiaDeCobroInterface {
         return "Normal";
     }
 
-    public function valorPasaje($valorBase){
+    public function valorPasaje($valorBase) : float {
         return $valorBase;
     }
 
