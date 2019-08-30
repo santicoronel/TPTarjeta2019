@@ -27,11 +27,16 @@ class EstrategiaDeCobroMedio implements EstrategiaDeCobroInterface {
      *    Si tiene permitido o no viajar segun las regulaciones del medio boleto
      */
     public function tienePermitidoViajar($tiempoActual) {
+        if ($this->horaPago == null)
+            $this->horaPago = $tiempoActual;
+
         $diferenciaDeTiempo = $horaActual - $this->horaPago;
+
         $this->horaPago = $tiempoActual;
         $cincoMinutos = 60 * 5;
 
-        // si pasaron menos de 5 minutos, y no es el primer pago, no puede pagar
-        return !($diferenciaDeTiempo != 0 && $diferenciaDeTiempo < $cincoMinutos);
+        // Puedo pagar si es el primer pago
+        // o si pasaron cinco minutos o mas desde el anterior
+        return $diferenciaDeTiempo == 0 || $diferenciaDeTiempo >= $cincoMinutos;
     }
 }

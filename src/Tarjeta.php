@@ -93,10 +93,14 @@ class Tarjeta implements TarjetaInterface {
             return "Trasbordo";
         }
 
-        if ($this->saldo >= $this->valorPasaje()) {   //se verifica si tiene saldo
-            if ($this->plus == 0) {                     //despues se comprueba que no deba ningun plus
-                $this->saldo -= $this->valorPasaje(); //si no debe ninguno, se descuenta normalmente el saldo
-                $this->horaPago = $this->tiempo->time(); //guarda la hora en la que se realizo el pago
+        //se verifica si tiene saldo
+        if ($this->saldo >= $this->valorPasaje()) {
+            //despues se comprueba que no deba ningun plus
+            if ($this->plus == 0) {
+                //si no debe ninguno, se descuenta normalmente el saldo
+                $this->saldo -= $this->valorPasaje();
+                //guarda la hora en la que se realizo el pago
+                $this->horaPago = $this->tiempo->time();
                 $this->fueTrasbordo = FALSE;
                 $this->plusPPagar = 0;
                 return "PagoNormal";

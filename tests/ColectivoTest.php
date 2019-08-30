@@ -85,16 +85,21 @@ class ColectivoTest extends TestCase {
         $this->assertEquals($medio->obtenerSaldo(),1.6);
         $this->assertEquals($medioUni->obtenerSaldo(),1.6);
 
-        $colectivo->pagarCon($medio);  //Genero Viaje Plus
+        //Genero Viaje Plus
+        $colectivo->pagarCon($medio);
         $colectivo->pagarCon($medioUni);
 
-        $medio->recargar(10);  //Cargo como para pagar un medio
+        //Cargo como para pagar un medio
+        $medio->recargar(10);
         $medioUni->recargar(10);
 
-        //Pero no puedo porque debo un plus
-
+        // Pero no puedo porque debo un plus
         $this->assertEquals($colectivo->pagarCon($medio), new Boleto($colectivo, $medio, "Ultimo Plus"));
         $this->assertEquals($colectivo->pagarCon($medioUni), new Boleto($colectivo, $medioUni, "Ultimo Plus"));
+
+        // NOTE:
+        // Este test esta mal. No es que no puedo viajar con el medio
+        // porque debo un plus sino porque no pasaron cinco minutos.
     }
 
     /**
