@@ -58,7 +58,7 @@ class TarjetaTest extends TestCase {
      */
     public function testLimiteTiempoMedio(){
         $tiempo = new TiempoFalso;
-        $medio = new Medio(1, $tiempo);
+		$medio = new Tarjeta(1, $tiempo, new EstrategiaDeCobroMedio);
         $colectivo = new Colectivo("102", "Negra", "Semtur", 2);
 
         $medio->recargar(20);
@@ -78,7 +78,7 @@ class TarjetaTest extends TestCase {
      */
     public function testLimiteMedioUni(){
         $tiempo = new TiempoFalso;
-        $uni = new MedioUniversitario(1, $tiempo);
+        $uni = new Tarjeta(1, $tiempo, new EstrategiaDeCobroMedioUniversitario);
         $colectivo = new Colectivo("102", "Negra", "Semtur", 3);
 
         $uni->recargar(50);
@@ -193,7 +193,7 @@ class TarjetaTest extends TestCase {
      */
     public function testTrasbordoMedio(){
         $tiempo = new TiempoFalso;
-        $medio = new Medio(1, $tiempo);
+        $medio = new Tarjeta(1, $tiempo, new EstrategiaDeCobroMedio);
                                                                                                                             
         $negra102 = new Colectivo ("102", "Negra", "Semtur", 2);
         $roja102 = new Colectivo ("102", "Roja", "Semtur", 3);
@@ -277,7 +277,7 @@ class TarjetaTest extends TestCase {
      */
     public function testTrasbordoMedioUni(){
         $tiempo = new TiempoFalso;
-        $medioUni = new MedioUniversitario(1, $tiempo);
+        $medioUni = new Tarjeta(1, $tiempo, new EstrategiaDeCobroMedioUniversitario);
                                                                                                                             
         $negra102 = new Colectivo ("102", "Negra", "Semtur", 2);
         $roja102 = new Colectivo ("102", "Roja", "Semtur", 3);

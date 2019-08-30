@@ -73,8 +73,8 @@ class ColectivoTest extends TestCase {
 	    $tiempo = new Tiempo;
         $tarjeta = new Tarjeta(1, $tiempo);
         $compl = new Completo(0, $tiempo);
-        $medio = new Medio(2, $tiempo);
-        $medioUni = new MedioUniversitario(3, $tiempo);
+        $medio = new Tarjeta(2, $tiempo, new EstrategiaDeCobroMedio);
+        $medioUni = new Tarjeta(3, $tiempo, new EstrategiaDeCobroMedioUniversitario);
         
         $medio->recargar(10);
         $medioUni->recargar(10);
@@ -151,7 +151,7 @@ class ColectivoTest extends TestCase {
      */
     public function testDebePlusMedio(){
         $tiempo = new Tiempo;
-        $medio = new Medio(1, $tiempo);
+        $medio = new Tarjeta(1, $tiempo, new EstrategiaDeCobroMedio);
         $colectivo = new Colectivo("102", "Negra", "Semtur", 40);
 
         $medio->recargar(10);
