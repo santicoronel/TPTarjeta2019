@@ -23,7 +23,7 @@ class TiempoFalso implements TiempoInterface {
 
     /**
      * Devuelve el tiempo falso
-     * 
+     *
      * @return int
      *     Tiempo falso
      */
@@ -33,7 +33,7 @@ class TiempoFalso implements TiempoInterface {
 
     /**
      * Devuelve si es feriado o no
-     * 
+     *
      * @return bool
      *     TRUE si es feriado, FALSE en caso contrario
      */

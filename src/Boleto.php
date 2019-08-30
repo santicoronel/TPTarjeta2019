@@ -19,20 +19,20 @@ class Boleto implements BoletoInterface {
     public function __construct($colectivo, $tarjeta, $tipoBoleto) {
 
         switch ($tipoBoleto) {
-            case "Normal":
-                $this->valor = $tarjeta->valorPasaje();
-                break;
-                                                                                                
-            case "Trasbordo":
-                $this->valor = $tarjeta->valorPasaje() * 0.33;
-                break;
+        case "Normal":
+            $this->valor = $tarjeta->valorPasaje();
+            break;
 
-            case "AbonaPlus":
-                $this->valor = $tarjeta->valorPasaje();                                    
-                break;                
-            
-            default:
-                $this->valor = 0.0;                                                                            
+        case "Trasbordo":
+            $this->valor = $tarjeta->valorPasaje() * 0.33;
+            break;
+
+        case "AbonaPlus":
+            $this->valor = $tarjeta->valorPasaje();
+            break;
+
+        default:
+            $this->valor = 0.0;
         }
 
         $this->colectivo = $colectivo;
@@ -57,7 +57,7 @@ class Boleto implements BoletoInterface {
 
     }
 
-    
+
     /**
      * Devuelve el valor del boleto.
      *
@@ -79,8 +79,8 @@ class Boleto implements BoletoInterface {
     }
 
     /**
-     * Devuelve los datos del boleto emitido si es 
-     * 
+     * Devuelve los datos del boleto emitido si es
+     *
      * @return string|NULL
      */
     public function obtenerDescripcion() {

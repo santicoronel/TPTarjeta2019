@@ -4,34 +4,34 @@ namespace TrabajoTarjeta;
 
 class EstrategiaDeCobroMedio implements EstrategiaDeCobroInterface {
 
-  private $horaPago;
+    private $horaPago;
 
-  public function tipo (){
-    return "Medio";
-  }
+    public function tipo (){
+        return "Medio";
+    }
 
-  /** Devuelve la mitad del costo usual.
-   * 
-   * @return float
-   *    Valor del pasaje
-   */
-  public function valorPasaje($valorBase) {
-    return $valorBase / 2.0;
-  }
+    /** Devuelve la mitad del costo usual.
+     *
+     * @return float
+     *    Valor del pasaje
+     */
+    public function valorPasaje($valorBase) {
+        return $valorBase / 2.0;
+    }
 
-  /**
-   * Se fija que el último viaje haya sido emitido al menos 5 minutos más tarde
-   * que el anterior.
-   * 
-   * @return bool
-   *    Si tiene permitido o no viajar segun las regulaciones del medio boleto
-   */
-  public function tienePermitidoViajar($tiempoActual) {
-    $diferenciaDeTiempo = $horaActual - $this->horaPago;
-    $this->horaPago = $tiempoActual;
-    $cincoMinutos = 60 * 5;
+    /**
+     * Se fija que el último viaje haya sido emitido al menos 5 minutos más tarde
+     * que el anterior.
+     *
+     * @return bool
+     *    Si tiene permitido o no viajar segun las regulaciones del medio boleto
+     */
+    public function tienePermitidoViajar($tiempoActual) {
+        $diferenciaDeTiempo = $horaActual - $this->horaPago;
+        $this->horaPago = $tiempoActual;
+        $cincoMinutos = 60 * 5;
 
-    // si pasaron menos de 5 minutos, y no es el primer pago, no puede pagar
-    return !($diferenciaDeTiempo != 0 && $diferenciaDeTiempo < $cincoMinutos);
-  }
+        // si pasaron menos de 5 minutos, y no es el primer pago, no puede pagar
+        return !($diferenciaDeTiempo != 0 && $diferenciaDeTiempo < $cincoMinutos);
+    }
 }

@@ -25,7 +25,7 @@ class Colectivo implements ColectivoInterface {
     public function linea() {
         return $this->linea;
     }
-    
+
     /**
      * Devuelve la bandera de la unidad. Ejemplo: "Negra"
      *
@@ -42,7 +42,7 @@ class Colectivo implements ColectivoInterface {
      * @return string
      *     Nombre de la empresa
      */
-    public function empresa() { 
+    public function empresa() {
         return $this->empresa;
     }
 
@@ -68,23 +68,23 @@ class Colectivo implements ColectivoInterface {
     public function pagarCon(TarjetaInterface $tarjeta) {
 
         switch ($tarjeta->descontarSaldo($this)) {
-            case "PagoNormal":
-                return new Boleto($this, $tarjeta, "Normal");
-            
-            case "AbonaPlus":
-                return new Boleto($this, $tarjeta, "AbonaPlus");
+        case "PagoNormal":
+            return new Boleto($this, $tarjeta, "Normal");
 
-            case "Trasbordo":
-                return new Boleto($this, $tarjeta, "Trasbordo");
+        case "AbonaPlus":
+            return new Boleto($this, $tarjeta, "AbonaPlus");
 
-            case "Plus1":
-                return new Boleto($this, $tarjeta, "Viaje Plus");
+        case "Trasbordo":
+            return new Boleto($this, $tarjeta, "Trasbordo");
 
-            case "Plus2":
-                return new Boleto($this, $tarjeta, "Ultimo Plus");
+        case "Plus1":
+            return new Boleto($this, $tarjeta, "Viaje Plus");
 
-            default:
-                return FALSE;
-        } 
+        case "Plus2":
+            return new Boleto($this, $tarjeta, "Ultimo Plus");
+
+        default:
+            return FALSE;
+        }
     }
 }

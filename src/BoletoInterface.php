@@ -21,8 +21,8 @@ interface BoletoInterface {
     public function obtenerColectivo();
 
     /**
-     * Devuelve los datos del boleto emitido si es 
-     * 
+     * Devuelve los datos del boleto emitido si es
+     *
      * @return string|NULL
      */
     public function obtenerDescripcion();

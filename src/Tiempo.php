@@ -7,20 +7,20 @@ class Tiempo implements TiempoInterface {
     protected $feriado;
 
     public function __construct($fer = FALSE) {
-        $this->feriado = $fer; 
+        $this->feriado = $fer;
     }
     /**
      * Devuelve el tiempo actual
-     * 
+     *
      * @return int
      */
     public function time() {
         return time();
     }
-    
+
     /**
      * Devuelve si es feriado o no
-     * 
+     *
      * @return bool
      *     TRUE si es feriado, FALSE en caso contrario
      */
@@ -38,4 +38,4 @@ class Tiempo implements TiempoInterface {
             $this->feriado = FALSE;
         }
     }
-} 
+}

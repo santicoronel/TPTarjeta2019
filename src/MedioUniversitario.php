@@ -12,7 +12,7 @@ class EstrategiaDeCobroMedioUniversitario implements EstrategiaDeCobroInterface 
 
     /**
      * Devuelve la mitad del valor usual, con un límite de dos boletos por día.
-     * 
+     *
      * @return float
      *    Valor del pasaje
      */
@@ -22,25 +22,25 @@ class EstrategiaDeCobroMedioUniversitario implements EstrategiaDeCobroInterface 
         } else {
             return $valorBase;
         }
-      }
+    }
 
     /**
      * Lleva la cuenta de la cantidad de medios usados
-     * 
+     *
      * @return bool
      *    Si tiene permitido o no viajar segun las regulaciones del medio universitario
      */
     public function tienePermitidoViajar($tiempoActual) {
-        // FIXME: comparar por YMD en vez de DMY  
+        // FIXME: comparar por YMD en vez de DMY
         $hoy = date("d/m/Y", $this->tiempo->time());
         $diaPago = date("d/m/Y", $this->horaPago);
-        
+
         if ($hoy > $diaPago) {
-          $this->mediosUsados = 0;
+            $this->mediosUsados = 0;
         }
-        
+
         if ($this->mediosUsados <= 2) {
-          $this->mediosUsados += 1;
+            $this->mediosUsados += 1;
         }
 
         return TRUE;

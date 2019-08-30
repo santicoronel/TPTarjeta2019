@@ -6,7 +6,7 @@ interface TiempoInterface {
 
     /**
      * Devuelve el tiempo actual
-     * 
+     *
      * @return int
      *     Tiempo actual
      */
@@ -14,7 +14,7 @@ interface TiempoInterface {
 
     /**
      * Devuelve si es feriado o no
-     * 
+     *
      * @return bool
      *     TRUE si es feriado, FALSE en caso contrario
      */
