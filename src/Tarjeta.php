@@ -3,30 +3,37 @@
 namespace TrabajoTarjeta;
 
 class Tarjeta implements TarjetaInterface {
+
+    // NOTE: $pasaje y $valorBoleto son la misma constante?
     protected $valorBoleto = 16.8;
     protected $pasaje = 16.8;
-    protected $saldo;
+
+    // NOTE: $cargas es constante?
     protected $cargas = array("10", "20", "30", "50", "100", "510.15", "962.59");
+
+    protected $saldo;
     protected $id;
     protected $horaPago;
-    protected $actualColectivo;
-    protected $anteriorColectivo = NULL;
-    protected $fueTrasbordo = FALSE;
     protected $tiempo;
+
     private $estrategiaDeCobro;
     private $manejadorPlus;
+    private $manejadorTrasbordo;
 
     public function __construct($id, TiempoInterface $tiempo, EstrategiaDeCobroInterface $estrategiaDeCobro = null) {
         $this->estrategiaDeCobro = $estrategiaDeCobro;
         if($this->estrategiaDeCobro == null)
             $this->estrategiaDeCobro = new EstrategiaDeCobroNormal;
 
+        // TODO?: Hacer DI sobre estos objetos???
         $this->manejadorPlus = new ChequeoPlus();
+        $this->manejadorTrasbordo = new ChequeoTrasbordo();
 
         $this->id = $id;
         $this->saldo = 0.0;
         $this->tiempo = $tiempo;
     }
+
     /**
      * Recarga una tarjeta con un cierto valor de dinero.
      *
@@ -82,17 +89,16 @@ class Tarjeta implements TarjetaInterface {
      * @return string|bool
      *    El tipo de pago o FALSE si el saldo es insuficiente
      */
-    protected function pagarBoleto() {
+    protected function pagarBoleto($colectivo, $tiempoActual) {
 
-        if ($this->esTrasbordo()) {  //Si es trasbordo
+        if ($this->esTrasbordo($colectivo, $tiempoActual)) {
+            // FIXME: Si es trasbordo no se fija si le alcanza
 
-            $this->saldo -= round($this->valorPasaje() * 0.33, 2); //Se cobra un 33% del valor del pasaje
-            $this->horaPago = $this->tiempo->time(); //guarda la hora en la que se realizo el pago
-            $this->fueTrasbordo = TRUE;
-            // $this->manejadorPlus->reestablecer();
+            //Se cobra un 33% del valor del pasaje
+            $this->saldo -= round($this->valorPasaje() * 0.33, 2);
+
             return "Trasbordo";
         }
-
 
         $costoDeLosPlus = $this->manejadorPlus->costoAPagar($this->pasaje);
         $costoDelPasajeActual = $this->valorPasaje();
@@ -104,7 +110,6 @@ class Tarjeta implements TarjetaInterface {
             // Si puedo, pago, reestablezco los plus, y marco la hora
             $this->saldo -= $costoTotal;
             $this->manejadorPlus->reestablecer();
-            $this->horaPago = $this->tiempo->time();
 
             if($costoDeLosPlus > 0)
                 return "AbonaPlus";
@@ -112,18 +117,14 @@ class Tarjeta implements TarjetaInterface {
                 return "PagoNormal";
 
             // Si no puedo, me fijo si me quedan plus
-        } else if($this->manejadorPlus->tienePlus()){
-
-            // Si me quedan plus, gasto un plus y marco la hora
-            $this->horaPago = $this->tiempo->time();
+        }
+        
+        // Si me quedan plus, gasto un plus
+        if($this->manejadorPlus->tienePlus())
             return $this->manejadorPlus->gastarPlus();
 
-        } else {
-
-            // Si no tengo ni plata ni plus, no puedo viajar
-            return false;
-
-        }
+        // Si no tengo ni plata ni plus, no puedo viajar
+        return false;
     }
 
 
@@ -137,17 +138,28 @@ class Tarjeta implements TarjetaInterface {
      *    El tipo de pago o FALSE si el saldo es insuficiente
      */
     public function descontarSaldo(ColectivoInterface $colectivo) {
-        if ($this->anteriorColectivo == NULL) {
-            $this->anteriorColectivo = $colectivo;
-        } else {
-            $this->anteriorColectivo = $this->actualColectivo;
-        }
-        $this->actualColectivo = $colectivo;
+        $tiempoActual = $this->tiempo->time();
 
-        if($this->estrategiaDeCobro->tienePermitidoViajar($this->tiempo->time()))
-            return $this->pagarBoleto();
-        else
-            return FALSE;
+        $tengoPermiso = $this->estrategiaDeCobro->tienePermitidoViajar(
+            $tiempoActual);
+
+        // si no tengo permiso no viajo
+        if($tengoPermiso === false)
+            return false;
+
+        $tipoDeViaje = $this->pagarBoleto($colectivo, $tiempoActual);
+
+        // si no puedo pagar no viajo
+        if($tipoDeViaje === false)
+            return false;
+
+        // Si viajo tengo que anotar algunas cosas antes de avisar que viajo
+
+        $this->manejadorTrasbordo->registrarViaje($colectivo, $tiempoActual);
+        // $this->estrategiaDeCobro->registrarViaje($tiempoActual);
+        $this->horaPago = $tiempoActual;
+
+        return $tipoDeViaje;
     }
 
 
@@ -218,70 +230,12 @@ class Tarjeta implements TarjetaInterface {
      * @return bool
      *    TRUE o FALSE dependiendo de si es trasbordo o no
      */
-    protected function esTrasbordo() {
-        $tiempoActual = $this->tiempo->time();
-        $hora = date("G", $tiempoActual);
-        $dia = date("w", $tiempoActual);
-
-        if ($this->colectivosDiferentes()) { //Si el colectivo en el que se esta usando la tarjeta ahora es diferente al anterior
-
-            if ($hora >= 22 || $hora < 6) { //Todos los dias de 22 a 6
-                if ($tiempoActual - $this->obtenerFecha() <= 5400) { //Si pasaron 90 minutos o menos
-                    $this->fueTrasbordo = TRUE;
-                    return TRUE; //Paga trasbordo
-                }
-            } elseif ($dia == 6) { //Si es sábado
-                if ($hora >= 6 && $hora < 14) { //De 6 a 14
-                    if ($tiempoActual - $this->obtenerFecha() <= 3600) { //Si pasaron 60 minutos o menos
-                        $this->fueTrasbordo = TRUE;
-                        return TRUE; //Paga trasbordo
-                    }
-                } else {
-                    if ($tiempoActual - $this->obtenerFecha() <= 5400) { //Si pasaron 90 minutos o menos
-                        $this->fueTrasbordo = TRUE;
-                        return TRUE; //Paga trasbordo
-                    }
-                }
-            } elseif ($dia == 0 || $this->eFeriado()) { //Si es domingo o feriado
-                if ($hora >= 6 && $hora < 22) { //De 6 a 22
-                    if ($tiempoActual - $this->obtenerFecha() <= 5400) { //Si pasaron 90 minutos o menos
-                        $this->fueTrasbordo = TRUE;
-                        return TRUE; //Paga trasbordo
-                    }
-                }
-            } else { //De lunes a viernes de 6 a 22
-                if ($tiempoActual - $this->obtenerFecha() <= 3600) { //Si pasó una hora o menos
-                    $this->fueTrasbordo = TRUE;
-                    return TRUE; //Paga trasbordo
-                }
-            }
-        }
-
-        return FALSE;
-    }
-
-
-    /**
-     * Se fija si el colectivo en donde se está pagando es distinto al
-     * del viaje anterior. Se comparan líneas y banderas
-     *
-     * @return bool
-     *    TRUE o FALSE dependiendo de si son iguales o no
-     */
-    protected function colectivosDiferentes() {
-
-        $linea1 = $this->anteriorColectivo->linea();
-        $linea2 = $this->actualColectivo->linea();
-
-        $bandera1 = $this->anteriorColectivo->bandera();
-        $bandera2 = $this->actualColectivo->bandera();
-
-        if ($linea1 != $linea2 || $bandera1 != $bandera2) {
-            return TRUE;
-        }
-
-
-        return FALSE;
+    protected function esTrasbordo($colectivo, $tiempoActual) {
+        return $this->manejadorTrasbordo->esTrasbordo(
+            $colectivo,
+            $tiempoActual,
+            $this->eFeriado()
+        );
     }
 
     /**
