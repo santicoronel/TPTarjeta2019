@@ -48,14 +48,6 @@ interface TarjetaInterface {
     public function descontarSaldo(ColectivoInterface $colectivo);
 
     /**
-     * Se abonan los viajes plus en función a los que tiene la tarjeta. Ejemplo: 33.6
-     *
-     * @return float
-     *    Valor total de viajes plus a pagar
-     */
-    public function abonaPlus();
-
-    /**
      * Devuelve el valor del boleto. Ejemplo 18.45
      *
      * @return float

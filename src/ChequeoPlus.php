@@ -5,7 +5,7 @@ namespace TrabajoTarjeta;
 class ChequeoPlus {
     private const PLUS_TOTAL = 2;
 
-    private $plusRestantes;
+    private $cantidad;
 
     /**
      *
@@ -25,7 +25,15 @@ class ChequeoPlus {
      */
 
     public function __construct () {
-            $this->plusRestantes = self::PLUS_TOTAL;
+            $this->cantidad = self::PLUS_TOTAL;
+    }
+
+    public function plusRestantes () {
+        return $this->cantidad;
+    }
+
+    public function plusGastados () {
+        return self::PLUS_TOTAL - $this->cantidad;
     }
 
     /**
@@ -33,8 +41,7 @@ class ChequeoPlus {
      * float -> float
      */
     public function costoAPagar ($valorBasePasaje) {
-        $plusGastados = self::PLUS_TOTAL - $this->plusRestantes;
-        return $valorBasePasaje * $plusGastados;
+        return $valorBasePasaje * $this->plusGastados();
     }
 
     /**
@@ -42,7 +49,7 @@ class ChequeoPlus {
      * void -> void
      */
     public function reestablecer () {
-        $this->plusRestantes = self::PLUS_TOTAL;
+        $this->cantidad = self::PLUS_TOTAL;
     }
 
     /**
@@ -50,7 +57,7 @@ class ChequeoPlus {
      * void -> bool
      */
     public function tienePlus () {
-        return $this->plusRestantes > 0;
+        return $this->cantidad > 0;
     }
 
     /**
@@ -58,11 +65,11 @@ class ChequeoPlus {
      * void -> string
      */
     public function gastarPlus () {
-        if($this->plusRestantes <= 0)
+        if($this->cantidad <= 0)
             throw new Exception("Intenta usar viaje Plus cuando no le quedan");
 
-        $this->plusRestantes = $this->plusRestantes - 1;
-        $plusGastados = self::PLUS_TOTAL - $this->plusRestantes;
+        $this->cantidad = $this->cantidad - 1;
+        $plusGastados = $this->plusGastados();
 
         return "Plus$plusGastados";
     }

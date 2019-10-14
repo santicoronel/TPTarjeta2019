@@ -7,13 +7,11 @@ class Tarjeta implements TarjetaInterface {
     protected $pasaje = 16.8;
     protected $saldo;
     protected $cargas = array("10", "20", "30", "50", "100", "510.15", "962.59");
-    protected $plus = 0;
     protected $id;
     protected $horaPago;
     protected $actualColectivo;
     protected $anteriorColectivo = NULL;
     protected $fueTrasbordo = FALSE;
-    protected $plusPPagar;
     protected $tiempo;
     private $estrategiaDeCobro;
     private $manejadorPlus;
@@ -65,7 +63,6 @@ class Tarjeta implements TarjetaInterface {
      * Suma 1 a la cantidad de viajes plus hechos
      */
     public function viajePlus() {
-        $this->plus += 1;
         $this->manejadorPlus->gastarPlus();
     }
 
@@ -92,7 +89,7 @@ class Tarjeta implements TarjetaInterface {
             $this->saldo -= round($this->valorPasaje() * 0.33, 2); //Se cobra un 33% del valor del pasaje
             $this->horaPago = $this->tiempo->time(); //guarda la hora en la que se realizo el pago
             $this->fueTrasbordo = TRUE;
-            $this->plusPPagar = 0;
+            // $this->manejadorPlus->reestablecer();
             return "Trasbordo";
         }
 
@@ -155,18 +152,6 @@ class Tarjeta implements TarjetaInterface {
 
 
     /**
-     * Se abonan los viajes plus en función a los que tiene la tarjeta. Ejemplo: 33.6
-     *
-     * @return float
-     *    Valor total de viajes plus a pagar
-     */
-    public function abonaPlus() {
-        $pagoPlus = $this->valorBoleto * $this->plus;
-        $this->plus = 0;
-        return $pagoPlus;
-    }
-
-    /**
      * Devuelve el valor del boleto. Ejemplo: 18.45
      *
      * @return float
@@ -183,7 +168,7 @@ class Tarjeta implements TarjetaInterface {
      *    Cantidad de plus a abonar
      */
     public function plusAPagar() {
-        return $this->plusPPagar;
+        return $this->manejadorPlus->plusGastados();
     }
 
     /**
@@ -193,7 +178,7 @@ class Tarjeta implements TarjetaInterface {
      *    Cantidad de plus en tarjeta
      */
     public function verPlus() {
-        return $this->plus;
+        return $this->manejadorPlus->plusRestantes();
     }
 
     /**
