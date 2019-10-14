@@ -24,7 +24,7 @@ class ChequeoPlus {
      *
      */
 
-    __construct () {
+    public function __construct () {
             $this->plusRestantes = self::PLUS_TOTAL;
     }
 
