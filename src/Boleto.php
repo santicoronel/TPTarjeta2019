@@ -16,7 +16,7 @@ class Boleto implements BoletoInterface {
     protected $tipoBoleto;
     protected $descripcion;
 
-    public function __construct($colectivo, $tarjeta, $tipoBoleto) {
+    public function __construct($colectivo, $tarjeta, $tipoBoleto, $plusPagados = 0) {
 
         switch ($tipoBoleto) {
         case "Normal":
@@ -31,7 +31,7 @@ class Boleto implements BoletoInterface {
             $this->valor = $tarjeta->valorPasaje();
             break;
 
-        default:
+        default: /* Implicito: Plus1 | Plus2 */
             $this->valor = 0.0;
         }
 
@@ -47,7 +47,7 @@ class Boleto implements BoletoInterface {
 
         $this->tipoBoleto = $tipoBoleto;
 
-        $this->total = $this->valor + $tarjeta->valorDelBoleto() * $tarjeta->plusAPagar();
+        $this->total = $this->valor + $tarjeta->valorDelBoleto() * $plusPagados;
 
         $this->saldo = $tarjeta->obtenerSaldo();
 
@@ -79,7 +79,7 @@ class Boleto implements BoletoInterface {
     }
 
     /**
-     * Devuelve los datos del boleto emitido si es
+     * Devuelve el adicional por viaje plus formateado en un formato legible
      *
      * @return string|NULL
      */

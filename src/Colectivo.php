@@ -67,12 +67,13 @@ class Colectivo implements ColectivoInterface {
      */
     public function pagarCon(TarjetaInterface $tarjeta) {
 
+        $plusAPagar = $tarjeta->plusAPagar();
         switch ($tarjeta->descontarSaldo($this)) {
         case "PagoNormal":
             return new Boleto($this, $tarjeta, "Normal");
 
         case "AbonaPlus":
-            return new Boleto($this, $tarjeta, "AbonaPlus");
+            return new Boleto($this, $tarjeta, "AbonaPlus", $plusAPagar);
 
         case "Trasbordo":
             return new Boleto($this, $tarjeta, "Trasbordo");
