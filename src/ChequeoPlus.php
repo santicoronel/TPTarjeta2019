@@ -2,7 +2,7 @@
 
 namespace TrabajoTarjeta;
 
-class Plus {
+class ChequeoPlus {
     private const PLUS_TOTAL = 2;
 
     private $plusRestantes;
