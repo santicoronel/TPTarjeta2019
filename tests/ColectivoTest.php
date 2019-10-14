@@ -70,7 +70,7 @@ class ColectivoTest extends TestCase {
     public function testFranquicias(){
         $colectivo = new Colectivo("102", NULL, NULL, NULL);
 
-	    $tiempo = new Tiempo;
+	    $tiempo = new TiempoFalso;
         $tarjeta = new Tarjeta(1, $tiempo);
         $compl = new Completo(0, $tiempo);
         $medio = new Tarjeta(2, $tiempo, new EstrategiaDeCobroMedio);
@@ -85,6 +85,9 @@ class ColectivoTest extends TestCase {
         $this->assertEquals($medio->obtenerSaldo(),1.6);
         $this->assertEquals($medioUni->obtenerSaldo(),1.6);
 
+        // Avanzo 6 minutos para asegurarme que puedo viajar con el medio
+        $tiempo->avanzar(60 * 6);
+
         //Genero Viaje Plus
         $colectivo->pagarCon($medio);
         $colectivo->pagarCon($medioUni);
@@ -92,6 +95,9 @@ class ColectivoTest extends TestCase {
         //Cargo como para pagar un medio
         $medio->recargar(10);
         $medioUni->recargar(10);
+
+        // Por la misma razon de antes, avanzo 6 minutos
+        $tiempo->avanzar(60 * 6);
 
         // Pero no puedo porque debo un plus
         $this->assertEquals($colectivo->pagarCon($medio), new Boleto($colectivo, $medio, "Ultimo Plus"));
@@ -178,24 +184,40 @@ class ColectivoTest extends TestCase {
      * con una tarjeta de tipo "Medio"
      */
     public function testDebePlusMedio(){
-        $tiempo = new Tiempo;
+        $tiempo = new TiempoFalso;
         $medio = new Tarjeta(1, $tiempo, new EstrategiaDeCobroMedio);
         $colectivo = new Colectivo("102", "Negra", "Semtur", 40);
 
         $medio->recargar(10);
         $colectivo->pagarCon($medio); //boleto normal
+
+        // Recordar que el medio solo se puede usar cada >= 5 minutos
+        $tiempo->avanzar(60 * 6);
+
         $colectivo->pagarCon($medio); //viaje plus 1
+
+
+        // Recordar que el medio solo se puede usar cada >= 5 minutos
+        $tiempo->avanzar(60 * 6);
 
         $medio->recargar(30);  //cargamos suficiente para pagar el plus y abonamos el plus que debiamos y el medio boleto normal
         $this->assertEquals($colectivo->pagarCon($medio), $abono1 = new Boleto($colectivo, $medio, "AbonaPlus", 1));
         $this->assertEquals($abono1->obtenerDescripcion(), "Abona Viajes Plus 16.8 y");
         $this->assertEquals($medio->obtenerSaldo(), 6.4 );
 
+        // Recordar que el medio solo se puede usar cada >= 5 minutos
+        $tiempo->avanzar(60 * 6);
         $colectivo->pagarCon($medio);
+        // Recordar que el medio solo se puede usar cada >= 5 minutos
+        $tiempo->avanzar(60 * 6);
         $colectivo->pagarCon($medio); //usamos los 2 plus
 
+        // Recordar que el medio solo se puede usar cada >= 5 minutos
+        $tiempo->avanzar(60 * 6);
         $this->assertFalse($colectivo->pagarCon($medio)); //ahora no podremos pagar
 
+        // Recordar que el medio solo se puede usar cada >= 5 minutos
+        $tiempo->avanzar(60 * 6);
         $medio->recargar(50);
         $this->assertEquals($colectivo->pagarCon($medio), $abono2 = new Boleto($colectivo, $medio, "AbonaPlus", 2));
         $this->assertEquals($abono2->obtenerDescripcion(), "Abona Viajes Plus 33.6 y");
