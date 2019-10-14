@@ -192,6 +192,9 @@ class TarjetaTest extends TestCase {
      * Comprueba el funcionamiento del trasbordo en todos los casos posibles, con una tarjeta de tipo "Medio" 
      */
     public function testTrasbordoMedio(){
+        // TODO: Este test es malo. Hay que arreglarlo (borrarlo y hacer mas tests mas chicos).
+        // "Comprueba [X] en todos los casos posibles ..." no es una buena forma de hacer tests, rompe la S de SOLID >:(
+
         $tiempo = new TiempoFalso;
         $medio = new Tarjeta(1, $tiempo, new EstrategiaDeCobroMedio);
                                                                                                                             
@@ -276,6 +279,9 @@ class TarjetaTest extends TestCase {
      * Comprueba el funcionamiento del trasbordo en todos los casos posibles, con una tarjeta de tipo "Medio Universitario" 
      */
     public function testTrasbordoMedioUni(){
+        // TODO: Este test es malo. Hay que arreglarlo (borrarlo y hacer mas tests mas chicos).
+        // Por exactamente la misma razon que el de arriba
+
         $tiempo = new TiempoFalso;
         $medioUni = new Tarjeta(1, $tiempo, new EstrategiaDeCobroMedioUniversitario);
                                                                                                                             

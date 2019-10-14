@@ -103,9 +103,6 @@ class ColectivoTest extends TestCase {
         $this->assertEquals($colectivo->pagarCon($medio), new Boleto($colectivo, $medio, "Ultimo Plus"));
         $this->assertEquals($colectivo->pagarCon($medioUni), new Boleto($colectivo, $medioUni, "Ultimo Plus"));
 
-        // NOTE:
-        // Este test esta mal. No es que no puedo viajar con el medio
-        // porque debo un plus sino porque no pasaron cinco minutos.
     }
 
     /**
