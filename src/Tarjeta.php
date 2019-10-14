@@ -156,7 +156,7 @@ class Tarjeta implements TarjetaInterface {
         // Si viajo tengo que anotar algunas cosas antes de avisar que viajo
 
         $this->manejadorTrasbordo->registrarViaje($colectivo, $tiempoActual);
-        // $this->estrategiaDeCobro->registrarViaje($tiempoActual);
+        $this->estrategiaDeCobro->registrarViaje($tiempoActual);
         $this->horaPago = $tiempoActual;
 
         return $tipoDeViaje;

@@ -12,6 +12,9 @@ class EstrategiaDeCobroNormal implements EstrategiaDeCobroInterface {
         return $valorBase;
     }
 
+    public function registrarViaje($tiempoActual) {
+    }
+
     public function tienePermitidoViajar($tiempoActual){
         return TRUE;
     }

@@ -4,7 +4,7 @@ namespace TrabajoTarjeta;
 
 class EstrategiaDeCobroMedio implements EstrategiaDeCobroInterface {
 
-    private $horaPago;
+    private $horaPago = null;
 
     public function tipo (){
         return "Medio";
@@ -19,6 +19,10 @@ class EstrategiaDeCobroMedio implements EstrategiaDeCobroInterface {
         return $valorBase / 2.0;
     }
 
+    public function registrarViaje($tiempoActual) {
+        $this->horaPago = $tiempoActual;
+    }
+
     /**
      * Se fija que el último viaje haya sido emitido al menos 5 minutos más tarde
      * que el anterior.
@@ -27,20 +31,16 @@ class EstrategiaDeCobroMedio implements EstrategiaDeCobroInterface {
      *    Si tiene permitido o no viajar segun las regulaciones del medio boleto
      */
     public function tienePermitidoViajar($tiempoActual) {
+
+        // Si es el primer pago
         if ($this->horaPago === null)
-            $this->horaPago = $tiempoActual;
+            return true;
 
         $diferenciaDeTiempo = $tiempoActual - $this->horaPago;
 
         $cincoMinutos = 60 * 5;
 
-        // Puedo pagar si es el primer pago
-        // o si pasaron cinco minutos o mas desde el anterior
-        if ($diferenciaDeTiempo == 0 || $diferenciaDeTiempo >= $cincoMinutos) {
-            $this->horaPago = $tiempoActual;
-            return true;
-        } else {
-            return false;
-        }
+        // Si pasaron cinco minutos o mas desde el anterior
+        return $diferenciaDeTiempo >= $cincoMinutos;
     }
 }
