@@ -71,6 +71,7 @@ class ChequeoTrasbordo {
     }
 
     // Esto quizas deberia ser un metodo de la clase Colectivo
+    // NOTE: Creeria que se puede simplificar a solamente comparar por numero
     protected function colectivosDiferentes($colectivo) {
         if ($this->colectivoAnterior == null)
             return true;
@@ -81,7 +82,10 @@ class ChequeoTrasbordo {
         $bandera1 = $this->colectivoAnterior->bandera();
         $bandera2 = $colectivo->bandera();
 
-        return $linea1 != $linea2 || $bandera1 != $bandera2;
+        $numero1 = $this->colectivoAnterior->numero();
+        $numero2 = $colectivo->numero();
+
+        return $linea1 != $linea2 || $bandera1 != $bandera2 || $numero1 != $numero2;
     }
 };
 
