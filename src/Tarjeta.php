@@ -23,7 +23,7 @@ class Tarjeta implements TarjetaInterface {
         if($this->estrategiaDeCobro == null)
             $this->estrategiaDeCobro = new EstrategiaDeCobroNormal;
 
-        $manejadorPlus = new ChequeoPlus();
+        $this->manejadorPlus = new ChequeoPlus();
 
         $this->id = $id;
         $this->saldo = 0.0;
