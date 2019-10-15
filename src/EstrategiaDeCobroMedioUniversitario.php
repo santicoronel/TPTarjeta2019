@@ -4,20 +4,27 @@ namespace TrabajoTarjeta;
 
 class EstrategiaDeCobroMedioUniversitario implements EstrategiaDeCobroInterface {
 
+    /** @var int $mediosUsados La cantidad de boletos usados en el dia actual */
     private $mediosUsados = 0;
+
+    /** @var ?int $horaPago el momento del ultimo boleto */
     private $horaPago = null;
 
-    public function tipo () {
+    public function tipo () : string {
         return "Medio Universitario";
     }
 
     /**
      * Devuelve la mitad del valor usual, con un límite de dos boletos por día.
+     * Pasado el limite, devuelve el valor base.
+     *
+     * @param float $valorBase
+     *     Valor de un pasaje normal
      *
      * @return float
-     *    Valor del pasaje
+     *     Valor del pasaje
      */
-    public function valorPasaje($valorBase) : float {
+    public function valorPasaje(float $valorBase) : float {
         if ($this->mediosUsados <= 2) {
             return $valorBase / 2.0;
         } else {
@@ -25,7 +32,7 @@ class EstrategiaDeCobroMedioUniversitario implements EstrategiaDeCobroInterface 
         }
     }
 
-    public function registrarViaje($tiempoActual) {
+    public function registrarViaje(int $tiempoActual) : void {
         if($this->horaPago !== null){
             $hoy = date("Y/m/d", $tiempoActual);
             $diaPago = date("Y/m/d", $this->horaPago);
@@ -41,15 +48,7 @@ class EstrategiaDeCobroMedioUniversitario implements EstrategiaDeCobroInterface 
             $this->mediosUsados += 1;
     }
 
-    /**
-     * Lleva la cuenta de la cantidad de medios usados
-     *
-     * @return bool
-     *    Si tiene permitido o no viajar segun las regulaciones del medio universitario
-     */
-    public function tienePermitidoViajar($tiempoActual) {
+    public function tienePermitidoViajar(int $tiempoActual) : bool {
         return TRUE;
     }
-
-
 }

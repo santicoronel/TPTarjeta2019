@@ -14,7 +14,7 @@ interface TarjetaInterface {
      *    TRUE si el monto a cargar es válido, o FALSE en caso de que no lo sea
      *
      */
-    public function recargar($monto);
+    public function recargar($monto) : bool;
 
     /**
      * Devuelve el valor de un pasaje. Ejemplo: 16.8
@@ -22,7 +22,7 @@ interface TarjetaInterface {
      * @return float
      *    Valor de pasaje
      */
-    public function valorPasaje();
+    public function valorPasaje() : float;
 
     /**
      * Suma 1 a la cantidad de viajes plus hechos
@@ -35,17 +35,17 @@ interface TarjetaInterface {
      * @return float
      *    Saldo
      */
-    public function obtenerSaldo();
+    public function obtenerSaldo() : float;
 
     /**
      * Descuenta el boleto del saldo de la tarjeta. Ejemplo: 'AbonaPlus'
      *
      * @param ColectivoInterface $colectivo
      *
-     * @return string|bool
-     *    El tipo de pago o FALSE si el saldo es insuficiente
+     * @return string|null
+     *    El tipo de pago o null si el saldo es insuficiente
      */
-    public function descontarSaldo(ColectivoInterface $colectivo);
+    public function descontarSaldo(ColectivoInterface $colectivo) : ?string;
 
     /**
      * Devuelve el valor del boleto. Ejemplo 18.45
@@ -53,7 +53,7 @@ interface TarjetaInterface {
      * @return float
      *    Valor del boleto
      */
-    public function valorDelBoleto();
+    public function valorDelBoleto() : float;
 
     /**
      * Devuelve la cantidad de viajes plus que se van a pagar en un viaje. Ejemplo: 1

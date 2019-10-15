@@ -4,18 +4,18 @@ namespace TrabajoTarjeta;
 
 class EstrategiaDeCobroNormal implements EstrategiaDeCobroInterface {
 
-    public function tipo (){
+    public function tipo () : string {
         return "Normal";
     }
 
-    public function valorPasaje($valorBase) : float {
+    public function valorPasaje(float $valorBase) : float {
         return $valorBase;
     }
 
-    public function registrarViaje($tiempoActual) {
+    public function registrarViaje(int $tiempoActual) : void {
     }
 
-    public function tienePermitidoViajar($tiempoActual){
+    public function tienePermitidoViajar(int $tiempoActual) : bool {
         return TRUE;
     }
 }

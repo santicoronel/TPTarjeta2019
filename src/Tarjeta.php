@@ -8,8 +8,8 @@ class Tarjeta implements TarjetaInterface {
     protected $valorBoleto = 16.8;
     protected $pasaje = 16.8;
 
-    // NOTE: $cargas es constante?
-    protected $cargas = array("10", "20", "30", "50", "100", "510.15", "962.59");
+    // NOTE: cargas es constante?
+    private const cargas = ["10", "20", "30", "50", "100", "510.15", "962.59"];
 
     protected $saldo;
     protected $id;
@@ -40,13 +40,13 @@ class Tarjeta implements TarjetaInterface {
      * @param int $monto
      *    Cantidad de dinero a recargar
      *
-     * @return bool
+     * @return
      *    TRUE si el monto a cargar es válido, o FALSE en caso de que no lo sea
      *
      */
-    public function recargar($monto) {
+    public function recargar($monto) : bool {
         // Esto comprueba si la carga esta dentro de los montos permitidos
-        $cargavalida = in_array($monto, $this->cargas);
+        $cargavalida = in_array($monto, self::cargas);
 
         //Comprueba si la carga va a obtener un adicional y se lo suma
         if ($monto == 510.15) {
@@ -79,20 +79,40 @@ class Tarjeta implements TarjetaInterface {
      * @return float
      *    Saldo
      */
-    public function obtenerSaldo() {
+    public function obtenerSaldo() : float {
         return $this->saldo;
     }
 
     /**
-     * Descuenta el saldo. Ejemplo: 'PagoNormal'
+     * @brief Determina que tipo de viaje se va a realizar y resta el saldo correspondiente
      *
-     * @return string|bool
-     *    El tipo de pago o FALSE si el saldo es insuficiente
+     *
+     * intenta viajar.
+     *
+     * es trasbordo?
+     *     si: se le cobra un 33%, fin
+     *
+     * CostoTotal <- Cuanto tiene que pagar?
+     *
+     * Puede pagar CostoTotal?
+     *     si: Paga CostoTotal y se le reestablecen los plus
+     *     no: Le queda plus?
+     *         si: paga con plus
+     *         no: rechazado
+     *
+     * @param ColectivoInterface $colectivo
+     * @param int $tiempoActual
+     *
+     * @return string|null
+     *    El tipo de pago o null si el saldo es insuficiente
      */
-    protected function pagarBoleto($colectivo, $tiempoActual) {
+    protected function pagarBoleto(ColectivoInterface $colectivo, $tiempoActual) : ?string {
 
         if ($this->esTrasbordo($colectivo, $tiempoActual)) {
             // FIXME: Si es trasbordo no se fija si le alcanza
+
+            // DUDA: Como se relaciona esto con
+            // EstrategiaDeCobroInterface::tienePermitidoViajar ?
 
             //Se cobra un 33% del valor del pasaje
             $this->saldo -= round($this->valorPasaje() * 0.33, 2);
@@ -137,7 +157,7 @@ class Tarjeta implements TarjetaInterface {
      * @return string|bool
      *    El tipo de pago o FALSE si el saldo es insuficiente
      */
-    public function descontarSaldo(ColectivoInterface $colectivo) {
+    public function descontarSaldo(ColectivoInterface $colectivo) : ?string {
         $tiempoActual = $this->tiempo->time();
 
         $tengoPermiso = $this->estrategiaDeCobro->tienePermitidoViajar(
@@ -145,13 +165,13 @@ class Tarjeta implements TarjetaInterface {
 
         // si no tengo permiso no viajo
         if($tengoPermiso === false)
-            return false;
+            return null;
 
         $tipoDeViaje = $this->pagarBoleto($colectivo, $tiempoActual);
 
         // si no puedo pagar no viajo
         if($tipoDeViaje === false)
-            return false;
+            return null;
 
         // Si viajo tengo que anotar algunas cosas antes de avisar que viajo
 
@@ -169,7 +189,7 @@ class Tarjeta implements TarjetaInterface {
      * @return float
      *    Valor del boleto
      */
-    public function valorDelBoleto() {
+    public function valorDelBoleto() : float {
         return $this->valorBoleto;
     }
 
@@ -179,7 +199,7 @@ class Tarjeta implements TarjetaInterface {
      * @return int
      *    Cantidad de plus a abonar
      */
-    public function plusAPagar() {
+    public function plusAPagar() : int {
         return $this->manejadorPlus->plusGastados();
     }
 
@@ -189,7 +209,7 @@ class Tarjeta implements TarjetaInterface {
      * @return int
      *    Cantidad de plus en tarjeta
      */
-    public function verPlus() {
+    public function verPlus() : int {
         return $this->manejadorPlus->plusRestantes();
     }
 
@@ -199,7 +219,7 @@ class Tarjeta implements TarjetaInterface {
      * @return string
      *    Tipo de tarjeta
      */
-    public function obtenerTipo() {
+    public function obtenerTipo() : string {
         return $this->estrategiaDeCobro->tipo();
     }
 
@@ -209,7 +229,7 @@ class Tarjeta implements TarjetaInterface {
      * @return int
      *    Hora en la que se efectuó el pago del boleto
      */
-    public function obtenerFecha() {
+    public function obtenerFecha() : ?int {
         return $this->horaPago;
     }
 
@@ -219,7 +239,7 @@ class Tarjeta implements TarjetaInterface {
      * @return int
      *    Número de ID de la tarjeta
      */
-    public function obtenerId() {
+    public function obtenerId() : int {
         return $this->id;
     }
 
@@ -230,7 +250,7 @@ class Tarjeta implements TarjetaInterface {
      * @return bool
      *    TRUE o FALSE dependiendo de si es trasbordo o no
      */
-    protected function esTrasbordo($colectivo, $tiempoActual) {
+    protected function esTrasbordo($colectivo, $tiempoActual) : bool {
         return $this->manejadorTrasbordo->esTrasbordo(
             $colectivo,
             $tiempoActual,
@@ -251,7 +271,7 @@ class Tarjeta implements TarjetaInterface {
      * @return bool
      *    TRUE si el día es feriado o FALSE si no lo es
      */
-    public function eFeriado() {
+    public function eFeriado() : bool {
         return $this->tiempo->esFeriado();
     }
 }

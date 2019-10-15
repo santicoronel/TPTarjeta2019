@@ -3,34 +3,40 @@
 namespace TrabajoTarjeta;
 
 class EstrategiaDeCobroMedio implements EstrategiaDeCobroInterface {
+    private const cincoMinutos = 60 * 5;
 
     private $horaPago = null;
 
-    public function tipo (){
+    public function tipo () : string {
         return "Medio";
     }
 
-    /** Devuelve la mitad del costo usual.
+    /**
+     * Devuelve la mitad del costo usual.
+     *
+     * @param float $valorBase
+     *     Valor de un pasaje normal
      *
      * @return float
      *    Valor del pasaje
      */
-    public function valorPasaje($valorBase) : float {
+    public function valorPasaje(float $valorBase) : float {
         return $valorBase / 2.0;
     }
 
-    public function registrarViaje($tiempoActual) {
+    public function registrarViaje(int $tiempoActual) : void {
         $this->horaPago = $tiempoActual;
     }
 
     /**
-     * Se fija que el último viaje haya sido emitido al menos 5 minutos más tarde
-     * que el anterior.
+     * Se fija que el último viaje haya sido emitido al menos 5 minutos más
+     * tarde que el anterior.
      *
      * @return bool
-     *    Si tiene permitido o no viajar segun las regulaciones del medio boleto
+     *     Si tiene permitido o no viajar segun las regulaciones del medio
+     *     boleto
      */
-    public function tienePermitidoViajar($tiempoActual) {
+    public function tienePermitidoViajar(int $tiempoActual) : bool {
 
         // Si es el primer pago
         if ($this->horaPago === null)
@@ -38,9 +44,7 @@ class EstrategiaDeCobroMedio implements EstrategiaDeCobroInterface {
 
         $diferenciaDeTiempo = $tiempoActual - $this->horaPago;
 
-        $cincoMinutos = 60 * 5;
-
         // Si pasaron cinco minutos o mas desde el anterior
-        return $diferenciaDeTiempo >= $cincoMinutos;
+        return $diferenciaDeTiempo >= self::cincoMinutos;
     }
 }

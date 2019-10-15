@@ -4,7 +4,16 @@ namespace TrabajoTarjeta;
 
 class TiempoFalso implements TiempoInterface {
 
+    /**
+     * El tiempo actual en segundos desde 1/1/1970
+     * @var int $tiempo
+     */
     protected $tiempo;
+
+    /**
+     * Indica si actualmente es feriado o no
+     * @var bool $feriado
+     */
     protected $feriado;
 
     public function __construct($inicio = 0, $fer = FALSE) {
@@ -14,8 +23,9 @@ class TiempoFalso implements TiempoInterface {
 
     /**
      * Avanza cierta cantidad de segundos
-     * @param int
-     *     Tiempo a avanzar
+     *
+     * @param int $segundos
+     *     Cantidad de tiempo a avanzar
      */
     public function avanzar($segundos) {
         $this->tiempo += $segundos;

@@ -6,6 +6,11 @@ class Boleto implements BoletoInterface {
 
     protected $valor;
     protected $colectivo;
+
+    /**
+     * La Tarjeta con la cual se genero este Boleto
+     * @var Tarjeta $tarjeta
+     */
     protected $tarjeta;
     protected $tipo;
     protected $fecha;

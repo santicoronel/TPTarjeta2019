@@ -88,4 +88,11 @@ class Colectivo implements ColectivoInterface {
             return FALSE;
         }
     }
+
+    public function esMismoValor (ColectivoInterface $otro) {
+        return $this->numero() == $otro->numero()
+            || $this->bandera() == $otro->bandera()
+            || $this->linea() == $otro->linea()
+            || $this->empresa() == $otro->empresa();
+    }
 }

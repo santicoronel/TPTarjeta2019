@@ -37,7 +37,7 @@ class ChequeoTrasbordo {
         $tiempoTranscurrido = $tiempoActual - $this->tiempoAnterior;
 
         // Si es de noche (10pm a 6am)
-        if (22 <= $hora || $hora < 6)
+        if (22 >= $hora || $hora < 6)
             return $this->chequeoNocturno($tiempoTranscurrido, $hora);
         
         // Los sabados

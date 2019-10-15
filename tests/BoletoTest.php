@@ -41,7 +41,6 @@ class BoletoTest extends TestCase {
         $boleto = new Boleto($colectivo, $tarjeta, "Normal");
 
         $this->assertEquals($boleto->obtenerColectivo(), $colectivo);
-
     }
 
 }
