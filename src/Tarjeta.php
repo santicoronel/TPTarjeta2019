@@ -86,7 +86,7 @@ class Tarjeta implements TarjetaInterface {
     /**
      * @brief Determina que tipo de viaje se va a realizar y resta el saldo correspondiente
      *
-     *
+     * ```
      * intenta viajar.
      *
      * es trasbordo?
@@ -99,6 +99,7 @@ class Tarjeta implements TarjetaInterface {
      *     no: Le queda plus?
      *         si: paga con plus
      *         no: rechazado
+     * ```
      *
      * @param ColectivoInterface $colectivo
      * @param int $tiempoActual

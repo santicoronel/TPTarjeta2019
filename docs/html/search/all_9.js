@@ -1,0 +1,10 @@
+var searchData=
+[
+  ['obtenercolectivo',['obtenerColectivo',['../classTrabajoTarjeta_1_1Boleto.html#a340be5e41935fc9e627cd6fc8536f06f',1,'TrabajoTarjeta\Boleto\obtenerColectivo()'],['../interfaceTrabajoTarjeta_1_1BoletoInterface.html#aa11a763f11befeb1e8a89186c33da23f',1,'TrabajoTarjeta\BoletoInterface\obtenerColectivo()']]],
+  ['obtenerdescripcion',['obtenerDescripcion',['../classTrabajoTarjeta_1_1Boleto.html#ac48a286a541cf857868ae3829afe03ce',1,'TrabajoTarjeta\Boleto\obtenerDescripcion()'],['../interfaceTrabajoTarjeta_1_1BoletoInterface.html#aa060c28d5443ef9e3f6439f5589042fb',1,'TrabajoTarjeta\BoletoInterface\obtenerDescripcion()']]],
+  ['obtenerfecha',['obtenerFecha',['../classTrabajoTarjeta_1_1Tarjeta.html#a4d8eb93e136430b6f9b6e6811fa001d8',1,'TrabajoTarjeta\Tarjeta\obtenerFecha()'],['../interfaceTrabajoTarjeta_1_1TarjetaInterface.html#a036221493903557e0a935c5e75d28560',1,'TrabajoTarjeta\TarjetaInterface\obtenerFecha()']]],
+  ['obtenerid',['obtenerId',['../classTrabajoTarjeta_1_1Tarjeta.html#a8bdfb143c903b95ff80d3f0c7b563703',1,'TrabajoTarjeta\Tarjeta\obtenerId()'],['../interfaceTrabajoTarjeta_1_1TarjetaInterface.html#a52d6b6d5c6ff9eb3cbe0ffd01b73edab',1,'TrabajoTarjeta\TarjetaInterface\obtenerId()']]],
+  ['obtenersaldo',['obtenerSaldo',['../classTrabajoTarjeta_1_1Tarjeta.html#acb72b2bbea70e01da880591a0134b7ee',1,'TrabajoTarjeta\Tarjeta\obtenerSaldo()'],['../interfaceTrabajoTarjeta_1_1TarjetaInterface.html#abe3afafdd1a53701ebc2aebc6d76630c',1,'TrabajoTarjeta\TarjetaInterface\obtenerSaldo()']]],
+  ['obtenertipo',['obtenerTipo',['../classTrabajoTarjeta_1_1Tarjeta.html#aeee8e5f51fd790f539c86be4fba7c5e9',1,'TrabajoTarjeta\Tarjeta\obtenerTipo()'],['../interfaceTrabajoTarjeta_1_1TarjetaInterface.html#ae36b38bb406545f832739b5f27868629',1,'TrabajoTarjeta\TarjetaInterface\obtenerTipo()']]],
+  ['obtenervalor',['obtenerValor',['../classTrabajoTarjeta_1_1Boleto.html#ae42d3c13f96f9cb3eca3026fc3183508',1,'TrabajoTarjeta\Boleto\obtenerValor()'],['../interfaceTrabajoTarjeta_1_1BoletoInterface.html#af8a3797e2802a2d09b0635a13fca04aa',1,'TrabajoTarjeta\BoletoInterface\obtenerValor()']]]
+];

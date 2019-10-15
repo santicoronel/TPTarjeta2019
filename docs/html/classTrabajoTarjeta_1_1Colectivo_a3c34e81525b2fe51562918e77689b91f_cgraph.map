@@ -1,0 +1,8 @@
+<map id="TrabajoTarjeta\Colectivo\pagarCon" name="TrabajoTarjeta\Colectivo\pagarCon">
+<area shape="rect" id="node2" href="$interfaceTrabajoTarjeta_1_1TarjetaInterface.html#acef30242b75e3d0287a16159b91fe5e7" title="TrabajoTarjeta\\TarjetaInterface\l\\plusAPagar" alt="" coords="217,5,417,47"/>
+<area shape="rect" id="node3" href="$interfaceTrabajoTarjeta_1_1TarjetaInterface.html#a206f5ae2bd3d6ffe5b37eb6c662a77ac" title="TrabajoTarjeta\\TarjetaInterface\l\\descontarSaldo" alt="" coords="217,71,417,112"/>
+<area shape="rect" id="node4" href="$interfaceTrabajoTarjeta_1_1ColectivoInterface.html#ab482032c645728d351a50d07ee8daa96" title="TrabajoTarjeta\\Colectivo\lInterface\\numero" alt="" coords="235,136,399,177"/>
+<area shape="rect" id="node5" href="$interfaceTrabajoTarjeta_1_1ColectivoInterface.html#a82fd0558e9beb317db979567a8e690b5" title="TrabajoTarjeta\\Colectivo\lInterface\\bandera" alt="" coords="235,201,399,243"/>
+<area shape="rect" id="node6" href="$interfaceTrabajoTarjeta_1_1ColectivoInterface.html#ada20b46c552fe7c5bb649eb451ab2593" title="TrabajoTarjeta\\Colectivo\lInterface\\linea" alt="" coords="235,267,399,308"/>
+<area shape="rect" id="node7" href="$interfaceTrabajoTarjeta_1_1ColectivoInterface.html#afad44aff7bdeb40ade9f18cfd67dd6a1" title="TrabajoTarjeta\\Colectivo\lInterface\\empresa" alt="" coords="235,332,399,373"/>
+</map>
