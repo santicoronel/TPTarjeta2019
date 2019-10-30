@@ -98,4 +98,7 @@ class Boleto implements BoletoInterface {
         return NULL;
     }
 
+    public function tipoDeBoleto () {
+        return $this->tipoBoleto;
+    }
 }
