@@ -90,7 +90,7 @@ class Tarjeta implements TarjetaInterface {
      * intenta viajar.
      *
      * es trasbordo?
-     *     si: se le cobra un 33%, fin
+     *     si: No paga. fin.
      *
      * CostoTotal <- Cuanto tiene que pagar?
      *
@@ -110,13 +110,8 @@ class Tarjeta implements TarjetaInterface {
     protected function pagarBoleto(ColectivoInterface $colectivo, $tiempoActual) : ?string {
 
         if ($this->esTrasbordo($colectivo, $tiempoActual)) {
-            // FIXME: Si es trasbordo no se fija si le alcanza
-
             // DUDA: Como se relaciona esto con
             // EstrategiaDeCobroInterface::tienePermitidoViajar ?
-
-            //Se cobra un 33% del valor del pasaje
-            $this->saldo -= round($this->valorPasaje() * 0.33, 2);
 
             return "Trasbordo";
         }
