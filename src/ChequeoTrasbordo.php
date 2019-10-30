@@ -37,9 +37,9 @@ class ChequeoTrasbordo {
         $tiempoTranscurrido = $tiempoActual - $this->tiempoAnterior;
 
         // Si es de noche (10pm a 6am)
-        if (22 >= $hora || $hora < 6)
+        if ($hora < 6 || 22 <= $hora)
             return $this->chequeoNocturno($tiempoTranscurrido, $hora);
-        
+
         // Los sabados
         if ($dia == self::sabado)
             return $this->chequeoSabados($tiempoTranscurrido, $hora);
@@ -60,10 +60,11 @@ class ChequeoTrasbordo {
 
     private function chequeoSabados ($tiempoTranscurrido, $hora) {
         // de 6 a 14
-        if ($hora < 14)
+        if ($hora < 14) {
             return $tiempoTranscurrido <= self::una_hora;
-        else
+        } else {
             return $tiempoTranscurrido <= self::una_hora_y_media;
+        }
     }
 
     private function chequeoDomingosYFeriados ($tiempoTranscurrido, $hora) {

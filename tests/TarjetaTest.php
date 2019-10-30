@@ -223,7 +223,7 @@ class TarjetaTest extends TestCase {
         $boleto1 = $colectivo1->pagarCon($tarjeta);
 
         //Avanzamos 90 minutos
-        $tiempo->avanzar($hora + 30 * $minuto);
+        $tiempo->avanzar($hora + 20 * $minuto);
 
         //Comprobamos que que se emite un trasbordo
         $boleto2 = $colectivo2->pagarCon($tarjeta);
@@ -240,13 +240,14 @@ class TarjetaTest extends TestCase {
         //Test domingos, pueden pasar hasta 90 minutos
         $tiempo->avanzar(86400);
 
-        $colectivo1->pagarCon($tarjeta);
+        $boleto1 = $colectivo1->pagarCon($tarjeta);
 
         //Avanzo 10 minutos
         $tiempo->avanzar(600);
 
         //Comprobamos que no se pueden emitir trasbordos en el mismo colectivo
-        $this->assertNotEquals($colectivo1->pagarCon($tarjeta), new Boleto($colectivo1, $tarjeta, "Trasbordo"));
+        $boleto2 = $colectivo1->pagarCon($tarjeta);
+        $this->assertNotEquals("Trasbordo", $boleto2->tipoDeBoleto());
 
         $tiempo->avanzar(86400); //Nos movemos al lunes a las 16:50
     }
@@ -259,15 +260,14 @@ class TarjetaTest extends TestCase {
         $tarjeta->recargar(100);
 
         //Test lunes a viernes, franja diurna. Limite de tiempo: 60 minutos
-        $colectivo1->pagarCon($tarjeta);
+        $boleto1 = $colectivo1->pagarCon($tarjeta);
 
         //Avanzamos 40 minutos
         $tiempo->avanzar(2400);
 
         //Comprobamos que se emita un trasbordo
-        $this->assertEquals(
-            $colectivo2->pagarCon($tarjeta),
-            new Boleto($colectivo2, $tarjeta, "Trasbordo"));
+        $boleto2 = $colectivo2->pagarCon($tarjeta);
+        $this->assertEquals("Trasbordo", $boleto2->tipoDeBoleto());
     }
 
     /**
@@ -275,15 +275,5 @@ class TarjetaTest extends TestCase {
      */
     public function testTrasbordoMismaLineaDistintaUnidad($tiempo, $tarjeta, $colectivo1, $colectivo2){
         $this->assertTrue(true);
-        /* TODO: Hacer este test.
-        $tarjeta->recargar(100);
-
-        $negra102->pagarCon($medio);
-        $tiempo->avanzar(600);
-
-        // Comprobamos que se puede emitir el trasbordo en un colectivo con la
-        // misma linea y bandera que el anterior
-        $this->assertEquals($negra102diferente->pagarCon($medio), new Boleto($negra102diferente, $medio, "Trasbordo"));
-         */
     }
 }
