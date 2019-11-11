@@ -104,16 +104,20 @@ class Tarjeta implements TarjetaInterface {
      * @param ColectivoInterface $colectivo
      * @param int $tiempoActual
      *
-     * @return string|null
-     *    El tipo de pago o null si el saldo es insuficiente
+     * @return array:[tipo:string, valor:float, plusPagados:int] | null
+     *    Informacion sobre el pago o null si no es posible pagar
      */
-    protected function pagarBoleto(ColectivoInterface $colectivo, $tiempoActual) : ?string {
+    protected function pagarBoleto(ColectivoInterface $colectivo, $tiempoActual) : ?array {
 
         if ($this->esTrasbordo($colectivo, $tiempoActual)) {
             // DUDA: Como se relaciona esto con
             // EstrategiaDeCobroInterface::tienePermitidoViajar ?
 
-            return "Trasbordo";
+            return [
+                "tipo" => TipoDeViaje::Trasbordo,
+                "costo" => 0,
+                "plusPagados" => 0
+            ];
         }
 
         $costoDeLosPlus = $this->manejadorPlus->costoAPagar($this->pasaje);
@@ -123,37 +127,57 @@ class Tarjeta implements TarjetaInterface {
         // Puedo pagar todo?
         if($this->saldo >= $costoTotal){
 
+            $plusGastados = $this->manejadorPlus->plusGastados();
+
             // Si puedo, pago, reestablezco los plus, y marco la hora
             $this->saldo -= $costoTotal;
             $this->manejadorPlus->reestablecer();
 
-            if($costoDeLosPlus > 0)
-                return "AbonaPlus";
-            else
-                return TipoDeViaje::Normal;
+            if($costoDeLosPlus > 0) {
+                return [
+                    "tipo" => TipoDeViaje::AbonaPlus,
+                    "costo" => $costoTotal,
+                    "plusPagados" => $plusGastados
+                ];
+            } else {
+                return [
+                    "tipo" => TipoDeViaje::Normal,
+                    "costo" => $costoTotal,
+                    "plusPagados" => 0
+                ];
+            }
+
+        } else if($this->manejadorPlus->tienePlus()) {
 
             // Si no puedo, me fijo si me quedan plus
-        }
-        
-        // Si me quedan plus, gasto un plus
-        if($this->manejadorPlus->tienePlus())
-            return $this->manejadorPlus->gastarPlus();
+            $modoPlus = $this->manejadorPlus->gastarPlus();
 
-        // Si no tengo ni plata ni plus, no puedo viajar
-        return false;
+            return [
+                "tipo" => $modoPlus,
+                "costo" => 0,
+                "plusPagados" => 0
+            ];
+
+        } else {
+            // Si no tengo ni plata ni plus, no puedo viajar
+            return null;
+        }
     }
 
 
     /**
-     * Descuenta el boleto del saldo de la tarjeta. Ejemplo: 'AbonaPlus'
+     *
+     * Verifica que se puede viejar y, de ser asi, descuenta el boleto del saldo
+     * de la tarjeta.
+     * Ejemplo: 'AbonaPlus'
      *
      * @param ColectivoInterface $colectivo
-     *    Colectivo anterior
+     *    Colectivo que intentamos tomar
      *
-     * @return string|bool
-     *    El tipo de pago o FALSE si el saldo es insuficiente
+     * @return array:[tipo:string, costo:float, tiempo:int, plusPagados:int] | null
+     *    Informacion sobre el viaje o null si no es posible viajar
      */
-    public function descontarSaldo(ColectivoInterface $colectivo) : ?string {
+    public function intentarViaje(ColectivoInterface $colectivo) : ?array {
         $tiempoActual = $this->tiempo->time();
 
         $tengoPermiso = $this->estrategiaDeCobro->tienePermitidoViajar(
@@ -163,10 +187,10 @@ class Tarjeta implements TarjetaInterface {
         if($tengoPermiso === false)
             return null;
 
-        $tipoDeViaje = $this->pagarBoleto($colectivo, $tiempoActual);
+        $datosDeViaje = $this->pagarBoleto($colectivo, $tiempoActual);
 
         // si no puedo pagar no viajo
-        if($tipoDeViaje === false)
+        if($datosDeViaje === null)
             return null;
 
         // Si viajo tengo que anotar algunas cosas antes de avisar que viajo
@@ -175,7 +199,12 @@ class Tarjeta implements TarjetaInterface {
         $this->estrategiaDeCobro->registrarViaje($tiempoActual);
         $this->horaPago = $tiempoActual;
 
-        return $tipoDeViaje;
+        return [
+            "tipo" => $datosDeViaje["tipo"],
+            "costo" => $datosDeViaje["costo"],
+            "tiempo" => $tiempoActual,
+            "plusPagados" => $datosDeViaje["plusPagados"]
+        ];
     }
 
 

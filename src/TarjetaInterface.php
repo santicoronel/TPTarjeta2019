@@ -42,10 +42,10 @@ interface TarjetaInterface {
      *
      * @param ColectivoInterface $colectivo
      *
-     * @return string|null
-     *    El tipo de pago o null si el saldo es insuficiente
+     * @return array:[tipo:string, costo:float, tiempo:int, plusPagados:int] | null
+     *    Informacion sobre el viaje o null si no es posible viajar
      */
-    public function descontarSaldo(ColectivoInterface $colectivo) : ?string;
+    public function intentarViaje(ColectivoInterface $colectivo) : ?array;
 
     /**
      * Devuelve el valor del boleto. Ejemplo 18.45

@@ -63,14 +63,16 @@ class TarjetaTest extends TestCase {
 
         $medio->recargar(20);
 
-        $this->assertEquals($colectivo->pagarCon($medio), new Boleto($colectivo, $medio, "Normal")); // se comprueba que se emite medio normal
+        // se comprueba que se emite medio normal
+        $this->assertEquals("Normal", $colectivo->pagarCon($medio)->tipoDeBoleto());
         $tiempo->avanzar(150); //y al pasar dos minutos y medio
 
         $this->assertFalse($colectivo->pagarCon($medio)); //no puede pagar
 
         $tiempo->avanzar(180); //pero al pasar otros 3 minutos
 
-        $this->assertEquals($colectivo->pagarCon($medio), new Boleto($colectivo, $medio, "Normal")); //se emite un medio normal sin problemas
+        //se emite un medio normal sin problemas
+        $this->assertEquals("Normal", $colectivo->pagarCon($medio)->tipoDeBoleto());
   }
 
     /**
@@ -83,25 +85,37 @@ class TarjetaTest extends TestCase {
 
         $uni->recargar(50);
 
+        //avanzar una hora
+        $tiempo->avanzar(3600);
 
-        $this->assertEquals($colectivo->pagarCon($uni), $medio1 = new Boleto($colectivo, $uni, "Normal"));
-        $this->assertEquals($medio1->obtenerValor(), 8.4);  //pago medio boleto
+        //pago medio boleto
+        $boleto = $colectivo->pagarCon($uni);
+        $this->assertEquals("Normal", $boleto->tipoDeBoleto());
+        $this->assertEquals($boleto->obtenerValor(), 8.4);
 
-        $tiempo->avanzar(3600); //avanzar una hora
+        //avanzar tres horas para no interferir con el trasbordo
+        $tiempo->avanzar(3 * 3600);
 
-        $this->assertEquals($colectivo->pagarCon($uni), $medio2 = new Boleto($colectivo, $uni, "Normal"));
-        $this->assertEquals($medio2->obtenerValor(), 8.4); //pago segundo medio boleto
+        //pago segundo medio boleto
+        $boleto = $colectivo->pagarCon($uni);
+        $this->assertEquals("Normal", $boleto->tipoDeBoleto());
+        $this->assertEquals($boleto->obtenerValor(), 8.4);
 
+        //avanzar tres horas para no interferir con el trasbordo
+        $tiempo->avanzar(3 * 3600);
 
-        $tiempo->avanzar(3600); //avanzamos una hora en el tiempo
+        // y pagamos un boleto normal porque ya usamos los 2 medios que teniamos disponibles
+        $boleto = $colectivo->pagarCon($uni);
+        $this->assertEquals("Normal", $boleto->tipoDeBoleto());
+        $this->assertEquals(16.8, $boleto->obtenerValor());
 
-        $this->assertEquals($colectivo->pagarCon($uni), $boleto = new Boleto($colectivo, $uni, "Normal"));
-        $this->assertEquals($boleto->obtenerValor(), 16.8); // y pagamos un boleto normal porque ya usamos los 2 medios que teniamos disponibles
+        //avanzamos un dia en el tiempo
+        $tiempo->avanzar(86400);
 
-        $tiempo->avanzar(86400);//avanzamos un dia en el tiempo
-
-        $this->assertEquals($colectivo->pagarCon($uni), $boleto = new Boleto($colectivo, $uni, "Normal"));
-        $this->assertEquals($boleto->obtenerValor(), 8.4); // se emite el primer medio ya que paso un dia
+        // se emite el primer medio ya que paso un dia
+        $boleto = $colectivo->pagarCon($uni);
+        $this->assertEquals("Normal", $boleto->tipoDeBoleto());
+        $this->assertEquals($boleto->obtenerValor(), 8.4);
     }
 
     public function provider () {

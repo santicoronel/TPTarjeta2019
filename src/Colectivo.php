@@ -68,12 +68,12 @@ class Colectivo implements ColectivoInterface {
     public function pagarCon(TarjetaInterface $tarjeta) {
 
         $plusAPagar = $tarjeta->plusAPagar();
-        $tipoDeViaje = $tarjeta->descontarSaldo($this);
+        $informacionDeViaje = $tarjeta->intentarViaje($this);
 
-        if(!$tipoDeViaje)
+        if($informacionDeViaje === null)
             return false;
 
-        return new Boleto($this, $tarjeta, $tipoDeViaje, $plusAPagar);
+        return new Boleto($this, $tarjeta, $informacionDeViaje);
     }
 
     public function esMismoValor (ColectivoInterface $otro) {
