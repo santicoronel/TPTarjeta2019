@@ -23,22 +23,22 @@ class Boleto implements BoletoInterface {
 
     public function __construct($colectivo, $tarjeta, $tipoBoleto, $plusPagados = 0) {
 
+        // TODO: Esta logica deberia estar en otro lado
         switch ($tipoBoleto) {
         case "Normal":
             $this->valor = $tarjeta->valorPasaje();
-            break;
-
-        case "Trasbordo":
-            $this->valor = $tarjeta->valorPasaje() * 0.33;
             break;
 
         case "AbonaPlus":
             $this->valor = $tarjeta->valorPasaje();
             break;
 
-        default: /* Implicito: Plus1 | Plus2 */
+        default: /* Implicito: Plus1 | Plus2 | Trasbordo */
             $this->valor = 0.0;
         }
+
+        if($tipoBoleto != "AbonaPlus")
+            $plusPagados = 0;
 
         $this->colectivo = $colectivo;
 

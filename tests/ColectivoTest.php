@@ -55,12 +55,12 @@ class ColectivoTest extends TestCase {
         $colectivo->pagarCon($tarjeta);
         $tarjeta->recargar(10);
 
-        $this->assertEquals($colectivo->pagarCon($tarjeta), new Boleto($colectivo, $tarjeta, "Ultimo Plus"));
+        $this->assertEquals($colectivo->pagarCon($tarjeta), new Boleto($colectivo, $tarjeta, "Plus2"));
 
         $tarjeta2->recargar(10); //recargamos una cantidad insuficiente de dinero en la tarjeta para que esta utilice los viajes plus
 
-        $this->assertEquals($colectivo->pagarCon($tarjeta2),new Boleto($colectivo, $tarjeta2, "Viaje Plus"));     //primero testeamos si se emite correctamente el primer plus
-        $this->assertEquals($colectivo->pagarCon($tarjeta2),new Boleto($colectivo, $tarjeta2, "Ultimo Plus"));     //y luego si se emite correctamente el boleto del ultimo plus
+        $this->assertEquals($colectivo->pagarCon($tarjeta2),new Boleto($colectivo, $tarjeta2, "Plus1"));     //primero testeamos si se emite correctamente el primer plus
+        $this->assertEquals($colectivo->pagarCon($tarjeta2),new Boleto($colectivo, $tarjeta2, "Plus2"));     //y luego si se emite correctamente el boleto del ultimo plus
 
     }
 
@@ -100,8 +100,8 @@ class ColectivoTest extends TestCase {
         $tiempo->avanzar(60 * 6);
 
         // Pero no puedo porque debo un plus
-        $this->assertEquals($colectivo->pagarCon($medio), new Boleto($colectivo, $medio, "Ultimo Plus"));
-        $this->assertEquals($colectivo->pagarCon($medioUni), new Boleto($colectivo, $medioUni, "Ultimo Plus"));
+        $this->assertEquals($colectivo->pagarCon($medio), new Boleto($colectivo, $medio, "Plus2"));
+        $this->assertEquals($colectivo->pagarCon($medioUni), new Boleto($colectivo, $medioUni, "Plus2"));
 
     }
 

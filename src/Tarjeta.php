@@ -130,7 +130,7 @@ class Tarjeta implements TarjetaInterface {
             if($costoDeLosPlus > 0)
                 return "AbonaPlus";
             else
-                return "PagoNormal";
+                return TipoDeViaje::Normal;
 
             // Si no puedo, me fijo si me quedan plus
         }
