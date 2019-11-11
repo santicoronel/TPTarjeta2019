@@ -25,11 +25,6 @@ interface TarjetaInterface {
     public function valorPasaje() : float;
 
     /**
-     * Suma 1 a la cantidad de viajes plus hechos
-     */
-    public function viajePlus();
-
-    /**
      * Devuelve el saldo que le queda a la tarjeta. Ejemplo: 37.9
      *
      * @return float
