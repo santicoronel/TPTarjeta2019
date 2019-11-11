@@ -72,7 +72,7 @@ class ColectivoTest extends TestCase {
 
 	    $tiempo = new TiempoFalso;
         $tarjeta = new Tarjeta(1, $tiempo);
-        $compl = new Completo(0, $tiempo);
+        $compl = new Tarjeta(0, $tiempo, new Completo);
         $medio = new Tarjeta(2, $tiempo, new EstrategiaDeCobroMedio);
         $medioUni = new Tarjeta(3, $tiempo, new EstrategiaDeCobroMedioUniversitario);
 

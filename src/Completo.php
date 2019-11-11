@@ -3,11 +3,22 @@
 namespace TrabajoTarjeta;
 
 /**
- * Redefinimos el valor y tipo del pasaje de la clase.
  */
-class Completo extends Tarjeta implements TarjetaInterface {
+class Completo implements EstrategiaDeCobroInterface {
 
-    protected $pasaje = 0.0;
-    protected $tipo = "Completo";
+    public function tipo () : string {
+        return "Completo";
+    }
+
+    public function valorPasaje(float $valorBase) : float {
+        return 0;
+    }
+
+    public function tienePermitidoViajar(int $tiempoActual) : bool {
+        return true;
+    }
+
+    public function registrarViaje(int $tiempoActual) : void {
+    }
 
 }
