@@ -183,7 +183,7 @@ class TarjetaTest extends TestCase {
 
         //Avanzamos hasta las 6 de la mañana de un feriado
         $tiempo->avanzar(6 * $hora);
-        $tarjeta->cFeriado();
+        $tiempo->cambiarFeriado();
 
         $colectivo1->pagarCon($tarjeta);
         $saldo = $tarjeta->obtenerSaldo();
@@ -202,7 +202,7 @@ class TarjetaTest extends TestCase {
         $boleto2 = $colectivo2->pagarCon($tarjeta);
         $this->assertNotEquals("Trasbordo", $boleto2->tipoDeBoleto());
 
-        $tarjeta->cFeriado();
+        $tiempo->cambiarFeriado();
     }
 
     /**

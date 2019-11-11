@@ -96,11 +96,6 @@ interface TarjetaInterface {
     public function obtenerId();
 
     /**
-     * Llama a una función del tiempo que hace al día feriado o no, dependiendo su valor anterior
-     */
-    public function cFeriado();
-
-    /**
      * Llama a una función del tiempo que indica si un día es feriado o no
      *
      * @return bool
