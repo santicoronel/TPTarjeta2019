@@ -13,7 +13,6 @@ class Tarjeta implements TarjetaInterface {
 
     protected $saldo;
     protected $id;
-    protected $horaPago;
     protected $tiempo;
 
     private $estrategiaDeCobro;
@@ -197,7 +196,6 @@ class Tarjeta implements TarjetaInterface {
 
         $this->manejadorTrasbordo->registrarViaje($colectivo, $tiempoActual);
         $this->estrategiaDeCobro->registrarViaje($tiempoActual);
-        $this->horaPago = $tiempoActual;
 
         return [
             "tipo" => $datosDeViaje["tipo"],
@@ -246,16 +244,6 @@ class Tarjeta implements TarjetaInterface {
      */
     public function obtenerTipo() : string {
         return $this->estrategiaDeCobro->tipo();
-    }
-
-    /**
-     * Devuelve la hora en la que se abonó un pasaje. Ejemplo: 543
-     *
-     * @return int
-     *    Hora en la que se efectuó el pago del boleto
-     */
-    public function obtenerFecha() : ?int {
-        return $this->horaPago;
     }
 
     /**

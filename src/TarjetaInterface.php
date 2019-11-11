@@ -80,14 +80,6 @@ interface TarjetaInterface {
     public function obtenerTipo();
 
     /**
-     * Devuelve la hora en la que se abonó un pasaje. Ejemplo: 543
-     *
-     * @return int
-     *    Hora en la que se efectuó el pago del boleto
-     */
-    public function obtenerFecha();
-
-    /**
      * Retorna el id único de la tarjeta. Ejemplo: 3
      *
      * @return int
