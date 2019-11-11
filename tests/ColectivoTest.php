@@ -11,7 +11,7 @@ class ColectivoTest extends TestCase {
      * Comprueba que no se pueda pagar un boleto sin el saldo suficiente
      */
     public function testPagarSaldoInsuf() {
-        $colectivo = new Colectivo("102", "Negra", "Semtur", 420);
+        $colectivo = Colectivo::crear("102", "Negra", "Semtur", 420);
 
 	    $tiempo = new Tiempo;
         $tarjeta = new Tarjeta(1, $tiempo );
@@ -29,7 +29,7 @@ class ColectivoTest extends TestCase {
      * Comprueba que se pueda abonar un viaje si el saldo es suficiente
      */
     public function testPagarSaldoSuf(){
-        $colectivo = new Colectivo("102", "Negra", "Semtur", "420") ;
+        $colectivo = Colectivo::crear("102", "Negra", "Semtur", "420") ;
 
 	    $tiempo = new Tiempo;
         $tarjeta = new Tarjeta(1, $tiempo);
@@ -45,7 +45,7 @@ class ColectivoTest extends TestCase {
      * Comprueba que se emitan correctamente los viajes plus
      */
     public function testViajesPlus() {
-        $colectivo = new Colectivo("102", NULL, NULL, NULL);
+        $colectivo = Colectivo::crear("102", NULL, NULL, NULL);
 
 	    $tiempo = new Tiempo;
         $tarjeta = new Tarjeta(1, $tiempo);
@@ -76,7 +76,7 @@ class ColectivoTest extends TestCase {
      * Comprueba el funcionamiento de las franquicias en todos los casos de emisión de boletos posibles
      */
     public function testFranquicias(){
-        $colectivo = new Colectivo("102", NULL, NULL, NULL);
+        $colectivo = Colectivo::crear("102", NULL, NULL, NULL);
 
 	    $tiempo = new TiempoFalso;
         $tarjeta = new Tarjeta(1, $tiempo);
@@ -117,7 +117,7 @@ class ColectivoTest extends TestCase {
      * Comprueba que se obtengan correctamente los datos de un colectivo
      */
     public function testDatosColectivo(){
-        $colectivo = new Colectivo("102", "Negra", "Semtur", 2);
+        $colectivo = Colectivo::crear("102", "Negra", "Semtur", 2);
 
         $this->assertEquals($colectivo->linea(), 102);
         $this->assertEquals($colectivo->empresa(), "Semtur");
@@ -133,7 +133,7 @@ class ColectivoTest extends TestCase {
 
         $tiempo = new Tiempo;
         $tarjeta = new Tarjeta(1, $tiempo);
-        $colectivo = new Colectivo("102", "Negra", "Semtur", 40);
+        $colectivo = Colectivo::crear("102", "Negra", "Semtur", 40);
 
         $tarjeta->recargar(10);
 
@@ -193,7 +193,7 @@ class ColectivoTest extends TestCase {
     public function testDebePlusMedio(){
         $tiempo = new TiempoFalso;
         $medio = new Tarjeta(1, $tiempo, new EstrategiaDeCobroMedio);
-        $colectivo = new Colectivo("102", "Negra", "Semtur", 40);
+        $colectivo = Colectivo::crear("102", "Negra", "Semtur", 40);
 
         $medio->recargar(10);
         $colectivo->pagarCon($medio); //boleto normal

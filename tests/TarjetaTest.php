@@ -59,7 +59,7 @@ class TarjetaTest extends TestCase {
     public function testLimiteTiempoMedio(){
         $tiempo = new TiempoFalso;
 		$medio = new Tarjeta(1, $tiempo, new EstrategiaDeCobroMedio);
-        $colectivo = new Colectivo("102", "Negra", "Semtur", 2);
+        $colectivo = Colectivo::crear("102", "Negra", "Semtur", 2);
 
         $medio->recargar(20);
 
@@ -81,7 +81,7 @@ class TarjetaTest extends TestCase {
     public function testLimiteMedioUni(){
         $tiempo = new TiempoFalso;
         $uni = new Tarjeta(1, $tiempo, new EstrategiaDeCobroMedioUniversitario);
-        $colectivo = new Colectivo("102", "Negra", "Semtur", 3);
+        $colectivo = Colectivo::crear("102", "Negra", "Semtur", 3);
 
         $uni->recargar(50);
 
@@ -126,18 +126,18 @@ class TarjetaTest extends TestCase {
             [
                 $tiempo1,
                 new Tarjeta(1, $tiempo1, new EstrategiaDeCobroNormal),
-                new Colectivo("102", "Negra", "Semtur", 1),
-                new Colectivo("102", "Roja", "Semtur", 2)
+                Colectivo::crear("102", "Negra", "Semtur", 1),
+                Colectivo::crear("102", "Roja", "Semtur", 2)
             ], [
                 $tiempo2,
                 new Tarjeta(1, $tiempo2, new EstrategiaDeCobroMedio),
-                new Colectivo("102", "Negra", "Semtur", 3),
-                new Colectivo("102", "Roja", "Semtur", 4)
+                Colectivo::crear("102", "Negra", "Semtur", 3),
+                Colectivo::crear("102", "Roja", "Semtur", 4)
             ], [
                 $tiempo3,
                 new Tarjeta(1, $tiempo3, new EstrategiaDeCobroMedioUniversitario),
-                new Colectivo("102", "Negra", "Semtur", 5),
-                new Colectivo("102", "Roja", "Semtur", 6)
+                Colectivo::crear("102", "Negra", "Semtur", 5),
+                Colectivo::crear("102", "Roja", "Semtur", 6)
             ]
         ];
     }

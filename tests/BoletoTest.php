@@ -14,7 +14,7 @@ class BoletoTest extends TestCase {
 	
 	    $tiempo = new Tiempo;
 
-	    $colectivo = new Colectivo("102", "Negra", "Semtur", "420");
+	    $colectivo = Colectivo::crear("102", "Negra", "Semtur", "420");
 
 	    $tarjeta = new Tarjeta(1, $tiempo);
 
@@ -44,7 +44,7 @@ class BoletoTest extends TestCase {
 
 	    $tarjeta = new Tarjeta(1, $tiempo);
 
-        $colectivo = new Colectivo($linea, $bandera, $empresa, $numero);
+        $colectivo = Colectivo::crear($linea, $bandera, $empresa, $numero);
 
         $boleto = new Boleto($colectivo, $tarjeta, "Normal");
 

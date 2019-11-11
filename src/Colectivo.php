@@ -9,13 +9,20 @@ class Colectivo implements ColectivoInterface {
     protected $numero;
     protected $bandera;
 
-    public function __construct($linea, $bandera, $empresa, $numero) {
+    private $canceladora;
+
+    public function __construct($linea, $bandera, $empresa, $numero, CanceladoraInterface $canceladora) {
         $this->linea = $linea;
         $this->bandera = $bandera;
         $this->empresa = $empresa;
         $this->numero = $numero;
+
+        $this->canceladora = $canceladora;
     }
 
+    public static function crear ($linea, $bandera, $empresa, $numero) {
+        return new Colectivo($linea, $bandera, $empresa, $numero, new CanceladoraMock);
+    }
     /**
      * Devuelve el nombre de la linea. Ejemplo "142"
      *

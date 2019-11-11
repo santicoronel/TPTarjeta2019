@@ -191,6 +191,8 @@ class Tarjeta implements TarjetaInterface {
         $this->estrategiaDeCobro->registrarViaje($tiempoActual);
 
         return [
+            "colectivo" => $colectivo,
+            "tarjeta" => $this,
             "tipo" => $datosDeViaje["tipo"],
             "costo" => $datosDeViaje["costo"],
             "tiempo" => $tiempoActual,
