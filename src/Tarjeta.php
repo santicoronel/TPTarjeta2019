@@ -267,17 +267,7 @@ class Tarjeta implements TarjetaInterface {
         return $this->manejadorTrasbordo->esTrasbordo(
             $colectivo,
             $tiempoActual,
-            $this->eFeriado()
+            $this->tiempo->esFeriado()
         );
-    }
-
-    /**
-     * Llama a una función del tiempo que indica si un día es feriado o no
-     *
-     * @return bool
-     *    TRUE si el día es feriado o FALSE si no lo es
-     */
-    public function eFeriado() : bool {
-        return $this->tiempo->esFeriado();
     }
 }
