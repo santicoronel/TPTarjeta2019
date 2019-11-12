@@ -13,13 +13,12 @@ class CanceladoraMock implements CanceladoraInterface {
 
     /**
      *
-     * Verifica que se puede viejar y, de ser asi, descuenta el boleto del saldo
-     * de la tarjeta.
-     * Ejemplo: 'AbonaPlus'
+     * Verifica que se puede viejar y, de ser asi, notifica a la tarjeta.
      *
      * @param ColectivoInterface $colectivo
      *    Colectivo que intentamos tomar
      *
+     * TODO: Hacer que devuelva una clase DatosDeViaje
      * @return array:[tipo:string, costo:float, tiempo:int, plusPagados:int] | null
      *    Informacion sobre el viaje o null si no es posible viajar
      */

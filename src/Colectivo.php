@@ -83,6 +83,9 @@ class Colectivo implements ColectivoInterface {
     public function pagarCon(TarjetaInterface $tarjeta) {
         $datos = $this->canceladora->intentarViaje($this, $tarjeta);
 
+        if($datos == null)
+            return false;
+
         return new Boleto($this, $tarjeta, $datos);
     }
 

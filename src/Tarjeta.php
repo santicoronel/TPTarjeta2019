@@ -28,14 +28,11 @@ class Tarjeta implements TarjetaInterface {
 
     public function __construct(
         $id,
-        TiempoInterface $tiempo,
         EstrategiaDeCobroInterface $estrategiaDeCobro = null
     ) {
 
         $this->estrategiaDeCobro =
             $estrategiaDeCobro ?? new EstrategiaDeCobroNormal;
-
-        $this->tiempo = $tiempo;
 
         $this->datos = new DatosDeTarjeta;
         $this->datos->id = $id;
@@ -83,6 +80,8 @@ class Tarjeta implements TarjetaInterface {
         $this->datos->tiempoDelUltimoViaje = $tiempoActual;
         $this->datos->saldo -= $costo;
         $this->datos->plusRestantes += $plusPagados;
+
+        $this->estrategiaDeCobro->registrarViaje($tiempoActual);
     }
 
     public function valorPasaje() : float {
