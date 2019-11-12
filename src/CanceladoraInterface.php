@@ -3,8 +3,18 @@
 namespace TrabajoTarjeta;
 
 interface CanceladoraInterface {
+
     /**
-     * Toma datos de viaje y los "muestra". devuelve los datos formateados
+     * Paga un viaje en el colectivo con una tarjeta en particular
+     *
+     * @param ColectivoInterface $colectivo
+     * @param TarjetaInterface $tarjeta
+     *
+     * @return array | null
+     *     datos sobre el viaje
      */
-    public function mostrarDatos (array $datos) : string;
+    public function intentarViaje (
+        ColectivoInterface $colectivo,
+        TarjetaInterface $tarjeta
+    );
 }

@@ -11,7 +11,13 @@ class Colectivo implements ColectivoInterface {
 
     private $canceladora;
 
-    public function __construct($linea, $bandera, $empresa, $numero, CanceladoraInterface $canceladora) {
+    public function __construct(
+        $linea,
+        $bandera,
+        $empresa,
+        $numero,
+        CanceladoraInterface $canceladora
+    ) {
         $this->linea = $linea;
         $this->bandera = $bandera;
         $this->empresa = $empresa;
@@ -21,8 +27,10 @@ class Colectivo implements ColectivoInterface {
     }
 
     public static function crear ($linea, $bandera, $empresa, $numero) {
-        return new Colectivo($linea, $bandera, $empresa, $numero, new CanceladoraMock);
+        return new Colectivo(
+            $linea, $bandera, $empresa, $numero, new CanceladoraMock(new TiempoFalso));
     }
+
     /**
      * Devuelve el nombre de la linea. Ejemplo "142"
      *
@@ -73,14 +81,9 @@ class Colectivo implements ColectivoInterface {
      *  suficiente en la tarjeta.
      */
     public function pagarCon(TarjetaInterface $tarjeta) {
+        $datos = $this->canceladora->intentarViaje($this, $tarjeta);
 
-        $plusAPagar = $tarjeta->plusAPagar();
-        $informacionDeViaje = $tarjeta->intentarViaje($this);
-
-        if($informacionDeViaje === null)
-            return false;
-
-        return new Boleto($this, $tarjeta, $informacionDeViaje);
+        return new Boleto($this, $tarjeta, $datos);
     }
 
     public function esMismoValor (ColectivoInterface $otro) {

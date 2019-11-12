@@ -33,16 +33,6 @@ interface TarjetaInterface {
     public function obtenerSaldo() : float;
 
     /**
-     * Descuenta el boleto del saldo de la tarjeta. Ejemplo: 'AbonaPlus'
-     *
-     * @param ColectivoInterface $colectivo
-     *
-     * @return array:[tipo:string, costo:float, tiempo:int, plusPagados:int] | null
-     *    Informacion sobre el viaje o null si no es posible viajar
-     */
-    public function intentarViaje(ColectivoInterface $colectivo) : ?array;
-
-    /**
      * Devuelve el valor del boleto. Ejemplo 18.45
      *
      * @return float
