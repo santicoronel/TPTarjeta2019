@@ -7,7 +7,7 @@ namespace TrabajoTarjeta;
  * cobrar un viaje plus.
  */
 class ChequeoPlus {
-    private const PLUS_TOTAL = 2;
+    public const PLUS_TOTAL = 2;
 
     private $cantidad;
 

@@ -2,35 +2,49 @@
 
 namespace TrabajoTarjeta;
 
+class DatosDeTarjeta {
+    public $saldo;
+    public $id;
+
+    public $tiempoDelUltimoViaje;
+    public $plusRestantes;
+}
+
 class Tarjeta implements TarjetaInterface {
 
-    // NOTE: $pasaje y $valorBoleto son la misma constante?
     protected $valorBoleto = 16.8;
-    protected $pasaje = 16.8;
 
     // NOTE: cargas es constante?
     private const cargas = ["10", "20", "30", "50", "100", "510.15", "962.59"];
 
-    protected $saldo;
-    protected $id;
+    protected $datos;
+
     protected $tiempo;
 
     private $estrategiaDeCobro;
     private $manejadorPlus;
     private $manejadorTrasbordo;
 
-    public function __construct($id, TiempoInterface $tiempo, EstrategiaDeCobroInterface $estrategiaDeCobro = null) {
-        $this->estrategiaDeCobro = $estrategiaDeCobro;
-        if($this->estrategiaDeCobro == null)
-            $this->estrategiaDeCobro = new EstrategiaDeCobroNormal;
+    public function __construct(
+        $id,
+        TiempoInterface $tiempo,
+        EstrategiaDeCobroInterface $estrategiaDeCobro = null
+    ) {
+
+        $this->estrategiaDeCobro =
+            $estrategiaDeCobro ?? new EstrategiaDeCobroNormal;
 
         // TODO?: Hacer DI sobre estos objetos???
         $this->manejadorPlus = new ChequeoPlus();
         $this->manejadorTrasbordo = new ChequeoTrasbordo();
 
-        $this->id = $id;
-        $this->saldo = 0.0;
         $this->tiempo = $tiempo;
+
+        $this->datos = new DatosDeTarjeta;
+        $this->datos->id = $id;
+        $this->datos->saldo = 0.0;
+        $this->datos->plusRestantes = ChequeoPlus::PLUS_TOTAL;
+        $this->datos->tiempoDelUltimoViaje = null;
     }
 
     /**
@@ -55,7 +69,7 @@ class Tarjeta implements TarjetaInterface {
         }
 
         if ($cargavalida) {
-            $this->saldo += $monto;
+            $this->datos->saldo += $monto;
         }
 
         return $cargavalida;
@@ -72,7 +86,7 @@ class Tarjeta implements TarjetaInterface {
      *    Saldo
      */
     public function obtenerSaldo() : float {
-        return $this->saldo;
+        return $this->datos->saldo;
     }
 
     /**
@@ -117,12 +131,12 @@ class Tarjeta implements TarjetaInterface {
         $costoTotal = $costoDelPasajeActual + $costoDeLosPlus;
 
         // Puedo pagar todo?
-        if($this->saldo >= $costoTotal){
+        if($this->datos->saldo >= $costoTotal){
 
             $plusGastados = $this->manejadorPlus->plusGastados();
 
             // Si puedo, pago, reestablezco los plus, y marco la hora
-            $this->saldo -= $costoTotal;
+            $this->datos->saldo -= $costoTotal;
             $this->manejadorPlus->reestablecer();
 
             if($costoDeLosPlus > 0) {
@@ -248,7 +262,7 @@ class Tarjeta implements TarjetaInterface {
      *    Número de ID de la tarjeta
      */
     public function obtenerId() : int {
-        return $this->id;
+        return $this->datos->id;
     }
 
     /**
@@ -264,5 +278,9 @@ class Tarjeta implements TarjetaInterface {
             $tiempoActual,
             $this->tiempo->esFeriado()
         );
+    }
+
+    public function obtenerDatos () {
+        return clone $this->datos;
     }
 }
