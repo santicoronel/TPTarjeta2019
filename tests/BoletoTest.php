@@ -34,23 +34,29 @@ class BoletoTest extends TestCase {
      * Comprueba que el boleto se genere correctamente con el colectivo en el que se abonó
      */
     public function testObtenerColectivo() {
-        $this->assertTrue(true);
-        /* TODO: Rehacer este test
         $linea = "102";
         $empresa = "Semtur";
         $numero = 420;
         $bandera = "Negra";
 
-	    $tiempo = new Tiempo;
+	    $tiempo = new TiempoFalso;
 
-	    $tarjeta = new Tarjeta(1, $tiempo);
+        $canceladora = new CanceladoraMock($tiempo);
+	    $tarjeta = new Tarjeta(1);
 
-        $colectivo = Colectivo::crear($linea, $bandera, $empresa, $numero);
+        $colectivo = new Colectivo($linea, $bandera, $empresa, $numero, $canceladora);
 
-        $boleto = new Boleto($colectivo, $tarjeta, "Normal");
+        $boleto = new Boleto(
+            $colectivo, $tarjeta,
+            [
+                "plusPagados" => 0,
+                "costo" => 16.80,
+                "tiempo" => 0,
+                "tipo" => "Normal"
+            ]
+        );
 
         $this->assertEquals($boleto->obtenerColectivo(), $colectivo);
-         */
     }
 
 }
