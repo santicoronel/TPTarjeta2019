@@ -76,7 +76,7 @@ class Tarjeta implements TarjetaInterface {
     }
 
     public function valorPasaje() : float {
-        return $this->estrategiaDeCobro->valorPasaje($this->pasaje);
+        return $this->estrategiaDeCobro->valorPasaje($this->valorBoleto);
     }
 
     /**
@@ -126,7 +126,7 @@ class Tarjeta implements TarjetaInterface {
             ];
         }
 
-        $costoDeLosPlus = $this->manejadorPlus->costoAPagar($this->pasaje);
+        $costoDeLosPlus = $this->manejadorPlus->costoAPagar($this->valorBoleto);
         $costoDelPasajeActual = $this->valorPasaje();
         $costoTotal = $costoDelPasajeActual + $costoDeLosPlus;
 

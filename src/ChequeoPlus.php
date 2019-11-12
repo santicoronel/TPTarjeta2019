@@ -11,8 +11,8 @@ class ChequeoPlus {
 
     private $cantidad;
 
-    public function __construct () {
-            $this->cantidad = self::PLUS_TOTAL;
+    public function __construct ($cantidad = self::PLUS_TOTAL) {
+            $this->cantidad = $cantidad;
     }
 
     /**

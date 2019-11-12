@@ -11,7 +11,9 @@ class ChequeoTrasbordo {
     private $tiempoAnterior = null;
     private $colectivoAnterior = null;
 
-    public function __construct () {
+    public function __construct ($colectivo = null, $tiempo = null) {
+        $tiempoAnterior = $tiempo;
+        $colectivoAnterior = $colectivo;
     }
 
     public function registrarViaje ($colectivo, $tiempoActual) {
