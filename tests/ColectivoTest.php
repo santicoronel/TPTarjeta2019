@@ -57,13 +57,11 @@ class ColectivoTest extends TestCase {
      * Comprueba que se emitan correctamente los viajes plus
      */
     public function testViajesPlus() {
-        $this->assertTrue(true);
-        /*
         $colectivo = Colectivo::crear("102", NULL, NULL, NULL);
 
 	    $tiempo = new Tiempo;
-        $tarjeta = new Tarjeta(1, $tiempo);
-        $tarjeta2 = new Tarjeta(2, $tiempo);
+        $tarjeta = new Tarjeta(1);
+        $tarjeta2 = new Tarjeta(2);
 
         $tarjeta->recargar(10);
         $colectivo->pagarCon($tarjeta);
@@ -84,22 +82,20 @@ class ColectivoTest extends TestCase {
         $this->assertEquals(
             "Plus2", $colectivo->pagarCon($tarjeta2)->tipoDeBoleto());
 
-         */
     }
 
     /**
      * Comprueba el funcionamiento de las franquicias en todos los casos de emisión de boletos posibles
      */
     public function testFranquicias(){
-        $this->assertTrue(true);
-        /*
-        $colectivo = Colectivo::crear("102", NULL, NULL, NULL);
-
 	    $tiempo = new TiempoFalso;
-        $tarjeta = new Tarjeta(1, $tiempo);
-        $compl = new Tarjeta(0, $tiempo, new Completo);
-        $medio = new Tarjeta(2, $tiempo, new EstrategiaDeCobroMedio);
-        $medioUni = new Tarjeta(3, $tiempo, new EstrategiaDeCobroMedioUniversitario);
+        $canceladora = new CanceladoraMock($tiempo);
+        $colectivo = new Colectivo("102", NULL, NULL, NULL, $canceladora);
+
+        $tarjeta = new Tarjeta(1);
+        $compl = new Tarjeta(0, new Completo);
+        $medio = new Tarjeta(2, new EstrategiaDeCobroMedio);
+        $medioUni = new Tarjeta(3, new EstrategiaDeCobroMedioUniversitario);
 
         $medio->recargar(10);
         $medioUni->recargar(10);
@@ -107,28 +103,28 @@ class ColectivoTest extends TestCase {
         $this->assertEquals("Normal", $colectivo->pagarCon($compl)->tipoDeBoleto());
         $this->assertEquals("Normal", $colectivo->pagarCon($medio)->tipoDeBoleto());
         $this->assertEquals("Normal", $colectivo->pagarCon($medioUni)->tipoDeBoleto());
-        $this->assertEquals($medio->obtenerSaldo(),1.6);
-        $this->assertEquals($medioUni->obtenerSaldo(),1.6);
 
-        // Avanzo 6 minutos para asegurarme que puedo viajar con el medio
-        $tiempo->avanzar(60 * 6);
+        $this->assertEquals(1.6, $medio->obtenerSaldo());
+        $this->assertEquals(1.6, $medioUni->obtenerSaldo());
+
+        // Avanzo 10 minutos para asegurarme que puedo viajar con el medio
+        $tiempo->avanzar(60 * 10);
 
         //Genero Viaje Plus
-        $colectivo->pagarCon($medio);
-        $colectivo->pagarCon($medioUni);
+        $this->assertEquals("Plus1", $colectivo->pagarCon($medio)->tipoDeBoleto());
+        $this->assertEquals("Plus1", $colectivo->pagarCon($medioUni)->tipoDeBoleto());
 
         //Cargo como para pagar un medio
         $medio->recargar(10);
         $medioUni->recargar(10);
 
-        // Por la misma razon de antes, avanzo 6 minutos
-        $tiempo->avanzar(60 * 6);
+        // Por la misma razon de antes, avanzo 10 minutos
+        $tiempo->avanzar(60 * 10);
 
         // Pero no puedo porque debo un plus
         $this->assertEquals("Plus2", $colectivo->pagarCon($medio)->tipoDeBoleto());
         $this->assertEquals("Plus2", $colectivo->pagarCon($medioUni)->tipoDeBoleto());
 
-         */
     }
 
     /**
@@ -147,12 +143,10 @@ class ColectivoTest extends TestCase {
      * con una tarjeta de tipo "Normal"
      */
     public function testDebePlusNormal(){
-        $this->assertTrue(true);
-        /*
         // TODO: Descomentar las lineas del boleto falso en este test
 
         $tiempo = new Tiempo;
-        $tarjeta = new Tarjeta(1, $tiempo);
+        $tarjeta = new Tarjeta(1);
         $colectivo = Colectivo::crear("102", "Negra", "Semtur", 40);
 
         $tarjeta->recargar(10);
@@ -203,8 +197,6 @@ class ColectivoTest extends TestCase {
         // $this->assertEquals($boletoReal, $boletoFalso);
         // $this->assertEquals($boletoFalso->obtenerDescripcion(), "Abona Viajes Plus 33.6 y");
         $this->assertEquals($tarjeta->obtenerSaldo(), 6.0 );
-
-         */
     }
 
     /**
@@ -212,11 +204,10 @@ class ColectivoTest extends TestCase {
      * con una tarjeta de tipo "Medio"
      */
     public function testDebePlusMedio(){
-        $this->assertTrue(true);
-        /*
         $tiempo = new TiempoFalso;
-        $medio = new Tarjeta(1, $tiempo, new EstrategiaDeCobroMedio);
-        $colectivo = Colectivo::crear("102", "Negra", "Semtur", 40);
+        $canceladora = new CanceladoraMock($tiempo);
+        $medio = new Tarjeta(1, new EstrategiaDeCobroMedio);
+        $colectivo = new Colectivo("102", "Negra", "Semtur", 40, $canceladora);
 
         $medio->recargar(10);
         $colectivo->pagarCon($medio); //boleto normal
@@ -257,7 +248,6 @@ class ColectivoTest extends TestCase {
         $this->assertEquals($boleto->obtenerDescripcion(), "Abona Viajes Plus 33.6 y");
         $this->assertEquals($medio->obtenerSaldo(), 14.4 );
 
-         */
     }
 
 }
