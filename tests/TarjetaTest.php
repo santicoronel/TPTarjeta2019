@@ -103,17 +103,54 @@ class TarjetaTest extends TestCase {
         $this->assertLessThan($plusRestantesAntes, $plusRestantesDespues);
     }
 
+    public function testLimiteEstrategiaMedioUni () {
+        $chequeador = new EstrategiaDeCobroMedioUniversitario;
+
+        $valorBase = 10;
+        $valorMedio = $valorBase / 2;
+
+        $chequeador->registrarViaje(3600);
+
+        $this->assertEquals($valorMedio,
+            $chequeador->valorPasaje($valorBase));
+
+
+        $chequeador->registrarViaje(2 * 3600);
+
+        $this->assertEquals($valorMedio,
+            $chequeador->valorPasaje($valorBase));
+
+        $chequeador->registrarViaje(3 * 3600);
+
+        $this->assertEquals($valorBase,
+            $chequeador->valorPasaje($valorBase));
+
+        return [$chequeador, $valorBase, $valorMedio];
+    }
+
+    /**
+     * @depends testLimiteEstrategiaMedioUni
+     */
+    public function testDiaSiguienteEstrategiaMedioUni ($args) {
+        [$chequeador, $valorBase, $valorMedio] = $args;
+
+        $chequeador->registrarViaje(25 * 3600);
+
+        $this->assertEquals($valorMedio,
+            $chequeador->valorPasaje($valorBase));
+    }
+
     /**
      * Comprueba que se puedan emitir dos medios universitarios por día
      */
     public function testLimiteMedioUni(){
-        $this->assertTrue(true);
-        /*
+        echo "\nCOMENZANDO\n";
         $tiempo = new TiempoFalso;
-        $uni = new Tarjeta(1, $tiempo, new EstrategiaDeCobroMedioUniversitario);
-        $colectivo = Colectivo::crear("102", "Negra", "Semtur", 3);
+        $canceladora = new CanceladoraMock($tiempo);
+        $uni = new Tarjeta(1, new EstrategiaDeCobroMedioUniversitario);
+        $colectivo = new Colectivo("102", "Negra", "Semtur", 3, $canceladora);
 
-        $uni->recargar(50);
+        $uni->recargar(100);
 
         //avanzar una hora
         $tiempo->avanzar(3600);
@@ -121,7 +158,7 @@ class TarjetaTest extends TestCase {
         //pago medio boleto
         $boleto = $colectivo->pagarCon($uni);
         $this->assertEquals("Normal", $boleto->tipoDeBoleto());
-        $this->assertEquals($boleto->obtenerValor(), 8.4);
+        $this->assertEquals(8.4, $boleto->obtenerValor());
 
         //avanzar tres horas para no interferir con el trasbordo
         $tiempo->avanzar(3 * 3600);
@@ -129,7 +166,7 @@ class TarjetaTest extends TestCase {
         //pago segundo medio boleto
         $boleto = $colectivo->pagarCon($uni);
         $this->assertEquals("Normal", $boleto->tipoDeBoleto());
-        $this->assertEquals($boleto->obtenerValor(), 8.4);
+        $this->assertEquals(8.4, $boleto->obtenerValor());
 
         //avanzar tres horas para no interferir con el trasbordo
         $tiempo->avanzar(3 * 3600);
@@ -140,13 +177,13 @@ class TarjetaTest extends TestCase {
         $this->assertEquals(16.8, $boleto->obtenerValor());
 
         //avanzamos un dia en el tiempo
-        $tiempo->avanzar(86400);
+        $tiempo->avanzar(25 * 60 * 60);
 
         // se emite el primer medio ya que paso un dia
         $boleto = $colectivo->pagarCon($uni);
+        echo "FINALIZADO\n";
         $this->assertEquals("Normal", $boleto->tipoDeBoleto());
-        $this->assertEquals($boleto->obtenerValor(), 8.4);
-         */
+        $this->assertEquals(8.4, $boleto->obtenerValor());
     }
 
     public function provider () {
