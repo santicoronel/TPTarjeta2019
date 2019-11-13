@@ -136,15 +136,15 @@ class CanceladoraMock implements CanceladoraInterface {
                 ];
             }
 
+            // Si no puedo, me fijo si me quedan plus
         } else if($manejadorPlus->tienePlus()) {
 
-            // Si no puedo, me fijo si me quedan plus
             $modoPlus = $manejadorPlus->gastarPlus();
 
             return [
                 "tipo" => $modoPlus,
                 "costo" => 0,
-                "plusPagados" => 0
+                "plusPagados" => -1
             ];
 
         } else {

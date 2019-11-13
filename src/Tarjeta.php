@@ -14,17 +14,13 @@ class DatosDeTarjeta {
 
 class Tarjeta implements TarjetaInterface {
 
+    // TODO: Mover esto a otro lado
     protected $valorBoleto = 16.8;
-
     private const cargas = ["10", "20", "30", "50", "100", "510.15", "962.59"];
 
     protected $datos;
 
-    protected $tiempo;
-
     public $estrategiaDeCobro;
-    private $manejadorPlus;
-    private $manejadorTrasbordo;
 
     public function __construct(
         $id,

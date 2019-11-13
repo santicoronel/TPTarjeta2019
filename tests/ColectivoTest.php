@@ -11,21 +11,30 @@ class ColectivoTest extends TestCase {
      * Comprueba que no se pueda pagar un boleto sin el saldo suficiente
      */
     public function testPagarSaldoInsuf() {
-        $this->assertTrue(true);
-        /*
-        $colectivo = Colectivo::crear("102", "Negra", "Semtur", 420);
+        $tiempo = new TiempoFalso;
 
-	    $tiempo = new Tiempo;
-        $tarjeta = new Tarjeta(1, $tiempo );
+        $canceladora = new CanceladoraMock($tiempo);
+
+        $colectivo = new Colectivo("102", "Negra", "Semtur", 420, $canceladora);
+
+        $tarjeta = new Tarjeta(1);
 
         $tarjeta->recargar(10);
 
-        $colectivo->pagarCon($tarjeta);   //hacemos los dos viajes plus para que
-        $colectivo->pagarCon($tarjeta);   //se quede sin viajes y testeamos
+        //hacemos los dos viajes plus para que
+        $colectivo->pagarCon($tarjeta);
 
-        $this->assertEquals($tarjeta->obtenerSaldo(),10);
+        // avanzamos 3 horas para no agarrar el trasbordo
+        $tiempo->avanzar(60 * 60 * 3);
+
+        //se quede sin viajes y testeamos
+        $colectivo->pagarCon($tarjeta);
+
+        // avanzamos 3 horas, nuevamente, para no agarrar el trasbordo
+        $tiempo->avanzar(60 * 60 * 3);
+
+        $this->assertEquals($tarjeta->obtenerSaldo(), 10);
         $this->assertFalse($colectivo->pagarCon($tarjeta));
-         */
     }
 
     /**

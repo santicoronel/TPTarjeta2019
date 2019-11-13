@@ -6,11 +6,6 @@ class Boleto implements BoletoInterface {
 
     protected $valor;
     protected $colectivo;
-
-    /**
-     * La Tarjeta con la cual se genero este Boleto
-     * @var Tarjeta $tarjeta
-     */
     protected $tarjeta;
     protected $tipo;
     protected $fecha;
@@ -25,23 +20,18 @@ class Boleto implements BoletoInterface {
         $this->tarjeta = $tarjeta;
 
         $this->valor = $informacionDeViaje["costo"];
-
-        $this->tipo = $tarjeta->obtenerTipo();
-
+        $this->tipoBoleto = $informacionDeViaje["tipo"];
         $tiempoDelViaje = $informacionDeViaje["tiempo"];
-        $this->fecha = date("d/m/Y H:i:s", $tiempoDelViaje);
+        $plusPagados = $informacionDeViaje["plusPagados"];
 
         $this->linea = $colectivo->linea();
 
-        $this->tipoBoleto = $informacionDeViaje["tipo"];
-
-        $plusPagados = $informacionDeViaje["plusPagados"];
-        $this->total = $this->valor + $tarjeta->valorDelBoleto() * $plusPagados;
-
+        $this->tipo = $tarjeta->obtenerTipo();
         $this->saldo = $tarjeta->obtenerSaldo();
 
-        $this->descripcion = $this->obtenerDescripcion();
+        $this->fecha = date("d/m/Y H:i:s", $tiempoDelViaje);
 
+        $this->total = $this->valor + $tarjeta->valorDelBoleto() * $plusPagados;
     }
 
 

@@ -86,6 +86,23 @@ class TarjetaTest extends TestCase {
             $colectivo->pagarCon($medio)->tipoDeBoleto());
   }
 
+    public function testGastarPlus () {
+        // TODO: la mayoria de los tests creo que repiten esto una y otra vez,
+        // mover a un dataProvider.
+
+        $tiempo = new TiempoFalso;
+        $canceladora = new CanceladoraMock($tiempo);
+        $colectivo = new Colectivo("102", "Negra", "Semtur", 420, $canceladora);
+        $tarjeta = new Tarjeta(1);
+
+        // No alcanza para un pasaje con $10
+        $tarjeta->recargar(10);
+        $plusRestantesAntes = $tarjeta->verPlus();
+        $colectivo->pagarCon($tarjeta);
+        $plusRestantesDespues = $tarjeta->verPlus();
+        $this->assertLessThan($plusRestantesAntes, $plusRestantesDespues);
+    }
+
     /**
      * Comprueba que se puedan emitir dos medios universitarios por día
      */
